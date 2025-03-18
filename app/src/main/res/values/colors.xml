@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="light_gray_login">#FFE4DFDF</color>
+    <color name="light_gray_login_text">#FF747688</color>
+    <color name="blue">#FF0000FF</color>
+    <color name="light_purple_login">#FF8A6DCA</color>
+    <color name="green_register">#FF74CF7E</color>
 </resources>
