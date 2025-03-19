@@ -37,6 +37,7 @@
             android:fontFamily="@font/poppins_medium"
             android:textSize="24sp"
             android:layout_marginLeft="42dp"
+            android:textColor="@color/black"
             />
 
     </FrameLayout>
@@ -177,6 +178,7 @@
             />
 
         <Button
+            android:id="@+id/sing_in_button"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:layout_marginLeft="50dp"
@@ -219,6 +221,7 @@
             />
 
         <Button
+            android:id="@+id/sing_up_button"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:layout_marginLeft="50dp"

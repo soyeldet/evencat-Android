@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuActivity"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:layout_marginLeft="30dp"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/profile_p"
+            android:scaleType="centerCrop" />
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your name"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textSize="19sp"
+        android:textColor="@color/black"
+        />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/profile_icon"
+            android:layout_marginTop="42dp"
+            android:layout_marginLeft="40dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Profile"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="42dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <Button
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            android:background="@android:color/transparent"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/search"
+            android:layout_marginTop="22dp"
+            android:layout_marginLeft="40dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Explore"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="22dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <Button
+            android:id="@+id/explore_button"
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="40dp"
+            android:background="@android:color/transparent"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/calendar"
+            android:layout_marginTop="21dp"
+            android:layout_marginLeft="40dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Events"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="22dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <Button
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="40dp"
+            android:background="@android:color/transparent"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="200dp"
+            android:background="@drawable/rounded_button_game"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="30dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:text="Game"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="18sp"
+            android:layout_marginLeft="105dp"
+            android:layout_marginBottom="47dp"
+            />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/crown"
+            android:layout_gravity="bottom|left"
+            android:layout_marginLeft="70dp"
+            android:layout_marginBottom="52dp"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="200dp"
+            android:background="@android:color/transparent"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="30dp"
+            >
+        </Button>
+
+    </FrameLayout>
+</LinearLayout>

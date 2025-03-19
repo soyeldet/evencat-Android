@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExploreActivity"
+    android:orientation="vertical"
+    android:background="@color/low_purple"
+    >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@drawable/rounded_frame_explore">
+
+        <ImageButton
+            android:id="@+id/menu_image_utton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/menu_explore"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="15dp"
+            />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/search"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="20dp"
+            app:tint="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search..."
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/low_opacity_white"
+            android:textSize="20sp"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="65dp"
+            />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Location:"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Barcelona"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|right"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:text="RENT A PLACE"
+            android:background="@drawable/rounded_button_login"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+
+        <Button
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/transparent"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upcoming events"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="40dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="See All >"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/light_gray_login_text"
+            android:textSize="15sp"
+            android:layout_gravity="right"
+            android:layout_marginTop="32dp"
+            android:layout_marginRight="42dp"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/rounde_image_friends"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Invite your firends"
+            android:layout_marginTop="48dp"
+            android:layout_marginLeft="60dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|left"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="60dp"
+            android:text="Invite"
+            android:background="@drawable/rounded_button_invite"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|left"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="60dp"
+            android:background="@android:color/transparent"
+            />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nearby You"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="40dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            />
+
+    </FrameLayout>
+</LinearLayout>
+</LinearLayout>

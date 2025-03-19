@@ -2,6 +2,7 @@ package com.example.evencat_android
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
@@ -9,20 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class RegisterActivity : AppCompatActivity() {
+class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        setContentView(R.layout.activity_menu)
 
-        val imageButtonBack: ImageButton = findViewById(R.id.back_image_button)
-        val buttonSingIn: Button = findViewById(R.id.sing_in_button)
+        val buttonExplore: Button = findViewById(R.id.explore_button)
 
-        imageButtonBack.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-
-        buttonSingIn.setOnClickListener{
+        buttonExplore.setOnClickListener{
             val intent = Intent(this, ExploreActivity::class.java)
             startActivity(intent)
         }

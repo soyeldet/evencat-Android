@@ -7,4 +7,9 @@
     <color name="blue">#FF0000FF</color>
     <color name="light_purple_login">#FF8A6DCA</color>
     <color name="green_register">#FF74CF7E</color>
+    <color name="dark_purple">#FF342E40</color>
+    <color name="low_purple">#FF9B8ABF</color>
+    <color name="low_opacity_white">#60FFFFFF</color>
+    <color name="blue_invite_friends">#6000F8FF</color>
+    <color name="blue_invite_friends_button">#FF00F8FF</color>
 </resources>

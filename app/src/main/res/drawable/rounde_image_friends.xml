@@ -1,0 +1,14 @@
+<!-- res/drawable/rounded_image_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <corners android:radius="20dp" />
+            <solid android:color="@color/blue_invite_friends" />
+        </shape>
+    </item>
+    <item>
+        <bitmap
+            android:src="@drawable/invite_friends"
+            android:gravity="center" />
+    </item>
+</layer-list>
