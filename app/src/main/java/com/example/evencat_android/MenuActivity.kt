@@ -16,9 +16,15 @@ class MenuActivity : AppCompatActivity() {
         setContentView(R.layout.activity_menu)
 
         val buttonExplore: Button = findViewById(R.id.explore_button)
+        val buttonEvents: Button = findViewById(R.id.events_button)
 
         buttonExplore.setOnClickListener{
             val intent = Intent(this, ExploreActivity::class.java)
+            startActivity(intent)
+        }
+
+        buttonEvents.setOnClickListener{
+            val intent = Intent(this, UserEventsActivity::class.java)
             startActivity(intent)
         }
     }

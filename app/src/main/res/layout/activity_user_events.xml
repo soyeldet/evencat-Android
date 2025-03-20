@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserEventsActivity"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/menu_image_utton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/menu_explore"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="15dp"
+            app:tint="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Events"
+            android:textSize="24sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="37dp"
+            android:layout_marginLeft="65dp"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="20dp"
+                android:showText="true"
+                android:textOff="UPCOMING"
+                android:textOn="PAST EVENTS"
+                android:textSize="15sp"
+                android:fontFamily="@font/poppins_medium"
+                android:thumb="@drawable/thumb_1"
+                android:track="@drawable/switch_track_1"
+                />
+        </FrameLayout>
+
+</LinearLayout>

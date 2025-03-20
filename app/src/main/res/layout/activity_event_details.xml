@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EventDetailsActivity"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/event_details"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:textSize="24sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/white"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="60dp"/>
+
+
+        <ImageView
+            android:id="@+id/back_image_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/back"
+            tools:ignore="MissingConstraints"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="40dp"
+            android:background="@android:color/transparent"
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="22dp"
+            android:background="@android:color/transparent"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event name (Ex: Concert)"
+            android:textSize="35sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="155dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/rounded_icon_background_event"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/calendar_event"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="165dp"
+            android:layout_marginLeft="40dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XX Month, 202X"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginTop="156dp"
+            android:layout_marginLeft="95dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00PM - 00:00PM"
+            android:textSize="12sp"
+            android:textColor="@color/light_gray_login_text"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginTop="185dp"
+            android:layout_marginLeft="95dp"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="230dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/rounded_icon_background_event"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/location"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="240dp"
+            android:layout_marginLeft="40dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginTop="231dp"
+            android:layout_marginLeft="95dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:textSize="12sp"
+            android:textColor="@color/light_gray_login_text"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginTop="260dp"
+            android:layout_marginLeft="95dp"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/profile_p"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="302dp"
+            android:layout_marginLeft="30dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Organizer name"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginTop="302dp"
+            android:layout_marginLeft="95dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Organizer"
+            android:textSize="12sp"
+            android:textColor="@color/light_gray_login_text"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginTop="332dp"
+            android:layout_marginLeft="95dp"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About event"
+            android:textSize="18sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="About event"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginLeft="140dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_button_login"
+            android:layout_gravity="center|bottom"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginBottom="38dp"
+            android:layout_gravity="center|bottom"
+            android:text="BUY TICKET"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="16sp"
+            />
+
+        <Button
+            android:id="@+id/buy_button"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginLeft="140dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center|bottom"
+            android:background="@android:color/transparent">
+        </Button>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="230dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_button_chat_event"
+            android:layout_gravity="center|bottom"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="130dp"
+            android:layout_marginBottom="35dp"
+            android:layout_gravity="center|bottom"
+            android:src="@drawable/chat"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginLeft="140dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center|bottom"
+            android:background="@android:color/transparent">
+        </Button>
+        
+    </FrameLayout>
+
+
+</LinearLayout>

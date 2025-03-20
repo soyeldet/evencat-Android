@@ -123,6 +123,7 @@
             android:textColor="@color/black"/>
 
         <Button
+            android:id="@+id/events_button"
             android:layout_width="130dp"
             android:layout_height="60dp"
             android:layout_marginLeft="40dp"
