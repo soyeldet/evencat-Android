@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/menu_image_utton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/menu_explore"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            app:tint="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile"
+            android:textSize="24sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="17dp"
+            android:layout_marginLeft="65dp"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/profile_p"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="30dp"
+            android:scaleType="centerCrop" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="165dp"
+            android:text="Your name"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="24dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            />
+
+        <TextView
+            android:layout_width="160dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="220dp"
+            android:background="@drawable/rounded_button_edit_profile"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="236dp"
+            android:layout_marginLeft="20dp"
+            android:text="Edit Profile"
+            android:textColor="@color/light_purple_login"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="18sp"
+            />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/edit_profile"
+            android:layout_gravity="center|top"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="235dp"
+            />
+
+        <Button
+            android:layout_width="160dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="220dp"
+            android:background="@android:color/transparent">
+        </Button>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About me"
+            android:textSize="18sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="320dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:gravity="left|top"
+            android:text="About me"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="350dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Firends"
+            android:textSize="18sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="560dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:text="About me"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="590dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            />
+    </FrameLayout>
+
+</LinearLayout>

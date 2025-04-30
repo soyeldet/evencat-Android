@@ -67,7 +67,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Full name"
+            android:hint="Full name"
             android:fontFamily="@font/poppins_medium"
             android:textSize="16sp"
             android:background="@android:color/transparent"
@@ -99,7 +99,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="abc@email.com"
+            android:hint="abc@email.com"
             android:fontFamily="@font/poppins_medium"
             android:textSize="16sp"
             android:background="@android:color/transparent"
@@ -131,7 +131,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Your password"
+            android:hint="Your password"
             android:fontFamily="@font/poppins_medium"
             android:textSize="16sp"
             android:background="@android:color/transparent"
@@ -173,7 +173,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Confirm password"
+            android:hint="Confirm password"
             android:fontFamily="@font/poppins_medium"
             android:textSize="16sp"
             android:background="@android:color/transparent"

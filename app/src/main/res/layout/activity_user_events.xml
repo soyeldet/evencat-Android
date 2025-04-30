@@ -40,6 +40,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/no_upcoming_events"/>
+
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,6 +59,13 @@
                 android:thumb="@drawable/thumb_1"
                 android:track="@drawable/switch_track_1"
                 />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="80dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"/>
         </FrameLayout>
 
 </LinearLayout>
