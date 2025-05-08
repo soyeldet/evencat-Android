@@ -49,6 +49,7 @@
             android:scaleType="centerCrop" />
 
         <EditText
+            android:id="@+id/nameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
@@ -69,11 +70,12 @@
             />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/editProfileText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
             android:layout_marginTop="236dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="122dp"
             android:text="Edit Profile"
             android:textColor="@color/light_purple_login"
             android:fontFamily="@font/poppins_medium"
@@ -81,6 +83,7 @@
             />
 
         <ImageView
+            android:id="@+id/iconEditProfile"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/edit_profile"
@@ -90,6 +93,7 @@
             />
 
         <Button
+            android:id="@+id/editProfile"
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:layout_gravity="center|top"
@@ -110,6 +114,7 @@
             />
 
         <EditText
+            android:id="@+id/descriptionText"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:gravity="left|top"
@@ -137,6 +142,7 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/friendsRView"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:text="About me"
@@ -146,6 +152,8 @@
             android:layout_marginTop="590dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
+            android:clickable="false"
+            android:focusable="false"
             />
     </FrameLayout>
 

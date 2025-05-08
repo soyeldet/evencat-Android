@@ -65,6 +65,7 @@
             />
 
         <EditText
+            android:id="@+id/nameText"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:hint="Full name"
@@ -97,6 +98,7 @@
             />
 
         <EditText
+            android:id="@+id/emailText"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:hint="abc@email.com"
@@ -129,6 +131,7 @@
             />
 
         <EditText
+            android:id="@+id/password1Text"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:hint="Your password"
@@ -140,12 +143,14 @@
             android:layout_gravity="center"
             android:layout_marginTop="1dp"
             android:textColor="@color/light_gray_login_text"
+            android:password="true"
             />
 
         <ImageButton
+            android:id="@+id/showPassword"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/password_invisible"
+            android:src="@drawable/password_visible"
             android:layout_gravity="center|right"
             android:layout_marginRight="20dp"
             android:background="@android:color/transparent"
@@ -171,6 +176,7 @@
             />
 
         <EditText
+            android:id="@+id/password2Text"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:hint="Confirm password"
@@ -182,12 +188,14 @@
             android:layout_gravity="center"
             android:layout_marginTop="1dp"
             android:textColor="@color/light_gray_login_text"
+            android:password="true"
             />
 
         <ImageButton
+            android:id="@+id/showPassword2"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/password_invisible"
+            android:src="@drawable/password_visible"
             android:layout_gravity="center|right"
             android:layout_marginRight="20dp"
             android:background="@android:color/transparent"

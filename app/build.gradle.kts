@@ -54,4 +54,12 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.circleimageview)
+    implementation(libs.gson)
+    implementation(libs.retrofit)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.logging.interceptor)
+    implementation(libs.converter.gson)
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.bcprov.jdk15to18)
+
 }
