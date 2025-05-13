@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/white">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -16,7 +23,7 @@
         
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
             android:background="@drawable/event_details"
             />
 
@@ -27,7 +34,7 @@
             android:textSize="24sp"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/white"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="55dp"
             android:layout_marginLeft="60dp"/>
 
 
@@ -39,14 +46,15 @@
             tools:ignore="MissingConstraints"
             android:layout_gravity="top|left"
             android:layout_marginLeft="22dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             android:background="@android:color/transparent"
             />
 
         <Button
+            android:id="@+id/back_button"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="55dp"
             android:layout_marginLeft="22dp"
             android:background="@android:color/transparent"/>
 
@@ -56,17 +64,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event name (Ex: Concert)"
-            android:textSize="35sp"
-            android:fontFamily="@font/poppins_medium"
-            android:textColor="@color/black"
-            android:layout_marginTop="35dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            />
+    <TextView
+        android:id="@+id/event_name_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        android:text="Write the title here"
+        android:textSize="35sp"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/black"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:background="@android:color/transparent"
+        />
 
         <ImageView
             android:layout_width="50dp"
@@ -85,24 +97,38 @@
             />
 
         <TextView
+            android:id="@+id/day_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="XX Month, 202X"
+            android:text="Select the date here"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:fontFamily="@font/poppins_medium"
-            android:layout_marginTop="156dp"
+            android:layout_marginTop="155dp"
             android:layout_marginLeft="95dp"/>
 
         <TextView
+            android:id="@+id/hour_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:00PM - 00:00PM"
+            android:text="Hour"
             android:textSize="12sp"
             android:textColor="@color/light_gray_login_text"
             android:fontFamily="@font/poppins_medium"
-            android:layout_marginTop="185dp"
+            android:layout_marginTop="184dp"
             android:layout_marginLeft="95dp"/>
+
+        <Button
+            android:id="@+id/select_date_button"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="156dp"
+            android:layout_marginLeft="30dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:focusable="false"
+            android:enabled="false"
+            />
 
         <ImageView
             android:layout_width="50dp"
@@ -121,9 +147,10 @@
             />
 
         <TextView
+            android:id="@+id/city_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="City"
+            android:text="Select the location here"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:fontFamily="@font/poppins_medium"
@@ -131,6 +158,7 @@
             android:layout_marginLeft="95dp"/>
 
         <TextView
+            android:id="@+id/location_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Location"
@@ -140,7 +168,20 @@
             android:layout_marginTop="260dp"
             android:layout_marginLeft="95dp"/>
 
+        <Button
+            android:id="@+id/select_city_button"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="230dp"
+            android:layout_marginLeft="30dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:focusable="false"
+            android:enabled="false"
+            />
+
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/organizer_picture"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/profile_p"
@@ -150,13 +191,14 @@
             />
 
         <TextView
+            android:id="@+id/organizer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Organizer name"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:fontFamily="@font/poppins_medium"
-            android:layout_marginTop="302dp"
+            android:layout_marginTop="303dp"
             android:layout_marginLeft="95dp"/>
 
         <TextView
@@ -182,7 +224,7 @@
             android:textSize="18sp"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             />
@@ -191,21 +233,35 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/event_description"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="About event"
+            android:layout_height="wrap_content"
+            android:text="Write the description here"
             android:textSize="16sp"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="left|top"
+            android:background="@android:color/transparent"
             />
 
+
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        >
         <TextView
+            android:id="@+id/backround_buy"
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:layout_marginLeft="140dp"
@@ -216,6 +272,7 @@
             />
 
         <TextView
+            android:id="@+id/text_buy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="140dp"
@@ -240,6 +297,43 @@
         </Button>
 
         <TextView
+            android:id="@+id/backround_create"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_button_login"
+            android:layout_gravity="center|bottom"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/text_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="38dp"
+            android:layout_gravity="center|bottom"
+            android:text="CREATE"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="16sp"
+            android:visibility="gone"
+            />
+
+        <Button
+            android:id="@+id/create_button"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center|bottom"
+            android:background="@android:color/transparent"
+            android:visibility="gone"
+            >
+        </Button>
+
+        <TextView
+            android:id="@+id/chat_background"
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:layout_marginLeft="100dp"
@@ -250,6 +344,7 @@
             />
 
         <ImageView
+            android:id="@+id/chat_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="130dp"
@@ -259,16 +354,16 @@
             />
 
         <Button
+            android:id="@+id/chat_button"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginLeft="140dp"
-            android:layout_marginRight="70dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="230dp"
             android:layout_marginBottom="20dp"
             android:layout_gravity="center|bottom"
             android:background="@android:color/transparent">
         </Button>
-        
+
     </FrameLayout>
-
-
 </LinearLayout>
+</ScrollView>

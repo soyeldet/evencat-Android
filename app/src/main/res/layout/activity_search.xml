@@ -22,12 +22,12 @@
             android:textSize="24sp"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="15dp"
             android:layout_gravity="top|center"/>
 
 
         <ImageButton
-            android:id="@+id/back_image_button"
+            android:id="@+id/back_button"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@drawable/back"
@@ -35,7 +35,7 @@
             tools:ignore="MissingConstraints"
             android:layout_gravity="top|left"
             android:layout_marginLeft="22dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:background="@android:color/transparent"
             />
 
@@ -43,18 +43,19 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/search"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="80dp"
             android:layout_marginLeft="20dp"
             app:tint="@color/black" />
 
         <EditText
+            android:id="@+id/event_name_editText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Event name..."
+            android:hint="Event name..."
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/light_gray_login_text"
             android:textSize="20sp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="80dp"
             android:layout_marginLeft="65dp"
             android:background="@android:color/transparent"
             />
@@ -75,6 +76,7 @@
         >
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/nearbyYouRV"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </androidx.recyclerview.widget.RecyclerView>

@@ -1,12 +1,13 @@
-package com.example.prueba_beat_on_jeans.api
+package com.example.evencat_android
 
+import com.example.evencat_android.api.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "http://10.0.2.2/evencat/"
+    private const val BASE_URL = "http://10.0.2.236/evencat/"
 
     val instance: ApiService by lazy {
         val logging = HttpLoggingInterceptor()

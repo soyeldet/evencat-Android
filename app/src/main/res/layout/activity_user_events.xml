@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,7 +26,7 @@
             android:layout_height="40dp"
             android:src="@drawable/menu_explore"
             android:background="@android:color/transparent"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="15dp"
             android:layout_marginLeft="15dp"
             app:tint="@color/black" />
 
@@ -31,7 +37,7 @@
             android:textSize="24sp"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"
-            android:layout_marginTop="37dp"
+            android:layout_marginTop="15dp"
             android:layout_marginLeft="65dp"/>
 
     </FrameLayout>
@@ -69,3 +75,11 @@
         </FrameLayout>
 
 </LinearLayout>
+<FrameLayout
+android:layout_width="300dp"
+android:layout_height="match_parent"
+android:layout_gravity="start">
+
+<include layout="@layout/activity_menu" />
+</FrameLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>

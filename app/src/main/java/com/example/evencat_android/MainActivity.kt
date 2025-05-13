@@ -2,6 +2,7 @@ package com.example.evencat_android
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
@@ -9,14 +10,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.prueba_beat_on_jeans.api.RetrofitClient
-import com.example.prueba_beat_on_jeans.api.User
-import com.example.prueba_beat_on_jeans.api.UserLogin
+import com.example.evencat_android.RetrofitClient
+import com.example.evencat_android.User
+import com.example.evencat_android.UserLogin
 import kotlinx.coroutines.launch
 import org.bouncycastle.crypto.engines.BlowfishEngine
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher
@@ -32,7 +36,13 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge() // <-- importante
         setContentView(R.layout.activity_main)
+        // Ajustar los insets si hace falta:
+
+        window.statusBarColor = Color.TRANSPARENT
+
+
 
         val buttonSingIn: Button = findViewById(R.id.sing_in_button)
         val buttonSingUp: Button = findViewById(R.id.sing_up_button)
@@ -107,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                                 UserSession.email = userRecieved.correo
                                 UserSession.password = userRecieved.contrasena
                                 UserSession.rol = userRecieved.rol
-                                UserSession.descripcion = userRecieved.descripcion
+                                UserSession.description = userRecieved.descripcion
                                 UserSession.isLoggedIn = true
                             }
 
@@ -150,7 +160,7 @@ class MainActivity : AppCompatActivity() {
         var email: String? = null
         var password: String? = null
         var rol: String? = null
-        var descripcion: String? = null
+        var description: String? = null
         var isLoggedIn: Boolean = false
 
         fun setUserData(context: Context, id: Int, username: String, email: String,
@@ -160,7 +170,7 @@ class MainActivity : AppCompatActivity() {
             UserSession.email = email
             UserSession.password = password
             UserSession.rol = rol
-            UserSession.descripcion = description
+            UserSession.description = description
             UserSession.isLoggedIn = true
 
             val sharedPref = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
@@ -183,7 +193,7 @@ class MainActivity : AppCompatActivity() {
             password = sharedPref.getString("password", null)
             rol = sharedPref.getString("rol", null)
             username = sharedPref.getString("username", null)
-            descripcion = sharedPref.getString("description", null)
+            description = sharedPref.getString("description", null)
             isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
         }
 
@@ -193,12 +203,22 @@ class MainActivity : AppCompatActivity() {
             email = null
             password = null
             rol = null
-            descripcion = null
+            description = null
             isLoggedIn = false
 
             val sharedPref = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
             with(sharedPref.edit()) {
                 clear()
+                apply()
+            }
+        }
+
+        // Esta función es opcional; solo útil si necesitas actualizar parcialmente
+        fun saveSession(context: Context) {
+            val sharedPref = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+            with(sharedPref.edit()) {
+                putString("username", username)
+                putString("description", description)
                 apply()
             }
         }

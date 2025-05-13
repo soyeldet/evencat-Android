@@ -1,30 +1,33 @@
 package com.example.evencat_android
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.widget.Button
-import android.widget.ImageButton
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlin.system.exitProcess
 
 class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, systemBars.top, 0, systemBars.bottom)
+            insets
+        }
 
-        val buttonExplore: Button = findViewById(R.id.explore_button)
-        val buttonEvents: Button = findViewById(R.id.events_button)
-        val buttonProfile: Button = findViewById(R.id.profile_button)
+        val buttonExplore: Button = findViewById(R.id.explore_button_menu)
+        val buttonEvents: Button = findViewById(R.id.events_button_menu)
+        val buttonProfile: Button = findViewById(R.id.profile_button_menu)
         val buttonProfile2: CircleImageView = findViewById(R.id.profile_image_button)
         val buttonExit: Button = findViewById(R.id.exit)
+        val username: TextView = findViewById(R.id.username)
+        username.setText(MainActivity.UserSession.username.toString())
 
         buttonExit.setOnClickListener {
             MainActivity.UserSession.clearSession(this)

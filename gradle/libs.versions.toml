@@ -2,6 +2,7 @@
 agp = "8.9.1"
 bcprovJdk15to18 = "1.70"
 circleimageview = "3.1.0"
+glide = "4.16.0"
 gson = "2.10.1"
 kotlin = "1.9.24"
 coreKtx = "1.15.0"
@@ -28,6 +29,7 @@ androidx-security-crypto = { module = "androidx.security:security-crypto", versi
 bcprov-jdk15to18 = { module = "org.bouncycastle:bcprov-jdk15to18", version.ref = "bcprovJdk15to18" }
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -47,4 +49,6 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-parcelize = { id = "kotlin-parcelize" }
+
 

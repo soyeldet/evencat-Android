@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -61,5 +62,5 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.androidx.security.crypto)
     implementation(libs.bcprov.jdk15to18)
-
+    implementation(libs.glide)
 }

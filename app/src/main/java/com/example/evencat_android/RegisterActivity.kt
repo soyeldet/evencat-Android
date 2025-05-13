@@ -17,9 +17,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.prueba_beat_on_jeans.api.RetrofitClient
-import com.example.prueba_beat_on_jeans.api.User
-import com.example.prueba_beat_on_jeans.api.UserLogin
+import com.example.evencat_android.RetrofitClient
+import com.example.evencat_android.User
+import com.example.evencat_android.UserLogin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
@@ -37,6 +37,12 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, systemBars.top, 0, systemBars.bottom)
+            insets
+        }
 
         val imageButtonBack: ImageButton = findViewById(R.id.back_image_button)
         val buttonSingIn: Button = findViewById(R.id.sing_in_button)
