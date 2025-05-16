@@ -11,7 +11,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserEventsActivity"
+    tools:context=".activities.UserEventsActivity"
     android:orientation="vertical"
     android:background="@color/white"
     >
@@ -33,7 +33,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My Events"
+            android:text="@string/my_events"
             android:textSize="24sp"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"
@@ -47,19 +47,21 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/image_ucpoming_events"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/no_upcoming_events"/>
 
             <Switch
+                android:id="@+id/switch_my_events"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
                 android:layout_marginTop="20dp"
                 android:showText="true"
-                android:textOff="UPCOMING"
-                android:textOn="PAST EVENTS"
+                android:textOff="@string/upcoming"
+                android:textOn="@string/past_events"
                 android:textSize="15sp"
                 android:fontFamily="@font/poppins_medium"
                 android:thumb="@drawable/thumb_1"
@@ -67,6 +69,7 @@
                 />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/my_events"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="80dp"

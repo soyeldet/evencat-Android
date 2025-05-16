@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/dialog_background">
+
+    <TextView
+        android:id="@+id/text_event_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Título del evento"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#222222"
+        android:paddingBottom="8dp" />
+
+    <ImageView
+        android:id="@+id/image_event"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:id="@+id/text_event_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descripción detallada del evento"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="#444444"
+        android:textSize="14sp"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:id="@+id/text_event_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Fecha: 1st Jan - Mon - 12:00 AM"
+        android:textColor="#666666"
+        android:textSize="13sp"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/text_event_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ubicación: Lugar del evento"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="#666666"
+        android:textSize="13sp"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/text_event_organizer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Organizador: Nombre organizador"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="#666666"
+        android:textSize="13sp"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/button_close_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text="@string/close"
+        android:backgroundTint="@color/low_purple"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

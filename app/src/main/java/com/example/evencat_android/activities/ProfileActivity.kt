@@ -1,4 +1,4 @@
-package com.example.evencat_android
+package com.example.evencat_android.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -20,7 +20,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.evencat_android.R
 import com.example.evencat_android.RetrofitClient
+import com.example.evencat_android.adapters.UserBubbleAdapter
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.launch
 
@@ -45,6 +47,7 @@ class ProfileActivity : AppCompatActivity() {
         val FriendsRV: RecyclerView = findViewById(R.id.friendsRView)
         val editProfile: Button = findViewById(R.id.editProfile)
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val buttonSettings: Button = findViewById(R.id.settings)
 
         val buttonExplore: Button = findViewById(R.id.explore_button_menu)
         val buttonEvents: Button = findViewById(R.id.events_button_menu)
@@ -62,6 +65,11 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
 
             finish()
+        }
+
+        buttonSettings.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         buttonExplore.setOnClickListener{

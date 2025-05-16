@@ -63,4 +63,6 @@ dependencies {
     implementation(libs.androidx.security.crypto)
     implementation(libs.bcprov.jdk15to18)
     implementation(libs.glide)
+    implementation(libs.core)
+
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Capa base (fondo rojo con bordes redondeados) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#AA151B"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+
+    <!-- Franja amarilla del medio (altura fija) -->
+    <item android:top="100dp" android:bottom="100dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#F1BF00"/>
+        </shape>
+    </item>
+
+</layer-list>

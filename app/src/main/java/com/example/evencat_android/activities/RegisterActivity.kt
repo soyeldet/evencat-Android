@@ -1,4 +1,4 @@
-package com.example.evencat_android
+package com.example.evencat_android.activities
 
 import android.content.Intent
 import android.os.Build
@@ -16,12 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
+import com.example.evencat_android.R
 import com.example.evencat_android.RetrofitClient
 import com.example.evencat_android.User
-import com.example.evencat_android.UserLogin
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import org.bouncycastle.crypto.engines.BlowfishEngine
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher
@@ -29,6 +26,7 @@ import org.bouncycastle.crypto.params.KeyParameter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Base64
 
 class RegisterActivity : AppCompatActivity() {
     private val secretKey = "999a999ale469993"
@@ -175,6 +173,6 @@ class RegisterActivity : AppCompatActivity() {
         var length = blockCipher.processBytes(inputBytes, 0, inputBytes.size, outputBytes, 0)
         length += blockCipher.doFinal(outputBytes, length)
 
-        return java.util.Base64.getEncoder().encodeToString(outputBytes.copyOf(length))
+        return Base64.getEncoder().encodeToString(outputBytes.copyOf(length))
     }
 }

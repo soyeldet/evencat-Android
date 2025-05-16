@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".RegisterActivity">
+    tools:context=".activities.RegisterActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sing up"
+            android:text="@string/sing_up_title"
             android:fontFamily="@font/poppins_medium"
             android:textSize="24sp"
             android:layout_marginLeft="42dp"
@@ -68,7 +68,7 @@
             android:id="@+id/nameText"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:hint="Full name"
+            android:hint="@string/name"
             android:fontFamily="@font/poppins_medium"
             android:textSize="16sp"
             android:background="@android:color/transparent"
@@ -134,7 +134,7 @@
             android:id="@+id/password1Text"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:hint="Your password"
+            android:hint="@string/password"
             android:fontFamily="@font/poppins_medium"
             android:textSize="16sp"
             android:background="@android:color/transparent"
@@ -179,7 +179,7 @@
             android:id="@+id/password2Text"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:hint="Confirm password"
+            android:hint="@string/password2"
             android:fontFamily="@font/poppins_medium"
             android:textSize="16sp"
             android:background="@android:color/transparent"
@@ -220,7 +220,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="SING IN"
+            android:text="@string/sing_up"
             android:textColor="@color/white"
             android:fontFamily="@font/poppins_medium"
             android:textSize="18sp"

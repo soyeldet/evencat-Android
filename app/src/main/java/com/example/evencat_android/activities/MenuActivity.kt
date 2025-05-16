@@ -1,4 +1,4 @@
-package com.example.evencat_android
+package com.example.evencat_android.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.evencat_android.R
+import com.example.evencat_android.activities.UserEventsActivity
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MenuActivity : AppCompatActivity() {
@@ -22,6 +24,7 @@ class MenuActivity : AppCompatActivity() {
         }
 
         val buttonExplore: Button = findViewById(R.id.explore_button_menu)
+        val buttonSettings: Button = findViewById(R.id.settings)
         val buttonEvents: Button = findViewById(R.id.events_button_menu)
         val buttonProfile: Button = findViewById(R.id.profile_button_menu)
         val buttonProfile2: CircleImageView = findViewById(R.id.profile_image_button)
@@ -56,6 +59,11 @@ class MenuActivity : AppCompatActivity() {
 
         buttonProfile2.setOnClickListener{
             val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+
+        buttonSettings.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 

@@ -1,4 +1,4 @@
-package com.example.evencat_android
+package com.example.evencat_android.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +14,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.evencat_android.adapters.Event2
+import com.example.evencat_android.adapters.Event2Adapter
+import com.example.evencat_android.R
+import com.example.evencat_android.RetrofitClient
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale

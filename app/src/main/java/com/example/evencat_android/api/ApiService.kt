@@ -1,21 +1,26 @@
 package com.example.evencat_android.api
 
+import com.example.evencat_android.Butaques
 import com.example.evencat_android.Event
 import com.example.evencat_android.EventRequest
 import com.example.evencat_android.Organizer
 import com.example.evencat_android.Place
+import com.example.evencat_android.ReservaResponse
+import com.example.evencat_android.ReservationRequest
 import com.example.evencat_android.User
 import com.example.evencat_android.UserLogin
-import com.google.gson.annotations.SerializedName
-import okhttp3.ResponseBody
-import retrofit2.http.GET
-import retrofit2.http.*
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
+
 
 interface ApiService {
 
@@ -65,6 +70,18 @@ interface ApiService {
 
     @GET("api/Usuaris/organizer/{id}")
     suspend fun getOrganizer(@Path("id") id: Int): Organizer
+
+    @POST("api/Reserves/CreateWithDetails")
+    suspend fun createReservation(@Body request: ReservationRequest): Response<ReservaResponse>
+
+    @GET("api/Reserves/AvailableSeats/{eventId}")
+    suspend fun getAvailableSeats(@Path("eventId") eventId: Int): Response<List<Int>> // <-- Lista de IDs
+
+    @GET("api/Esdeveniments/Reservats/{usuariId}")
+    suspend fun getReservedEvents(@Path("usuariId") usuariId: Int): List<Event>
+
+    @PUT("api/Usuaris/{id}/UpdateProfile")
+    fun updateUser(@Path("id") id: Int, @Body user: User): Call<ResponseBody>
 
 
 }

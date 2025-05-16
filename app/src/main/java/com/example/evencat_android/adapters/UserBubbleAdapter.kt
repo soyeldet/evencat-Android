@@ -1,10 +1,11 @@
-package com.example.evencat_android
+package com.example.evencat_android.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.evencat_android.R
 import java.util.Random
 
 class UserBubbleAdapter(private val userList: List<String>) :

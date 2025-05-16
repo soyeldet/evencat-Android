@@ -1,9 +1,10 @@
-package com.example.evencat_android
+package com.example.evencat_android.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,13 +13,20 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.evencat_android.Event
+import com.example.evencat_android.EventRequest
+import com.example.evencat_android.R
+import com.example.evencat_android.ReservationRequest
+import com.example.evencat_android.RetrofitClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import android.widget.ArrayAdapter
-import org.bouncycastle.crypto.params.Blake3Parameters.context
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.Date
+import java.util.Locale
+
+
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class EventDetailsActivity : AppCompatActivity() {
@@ -32,6 +40,8 @@ class EventDetailsActivity : AppCompatActivity() {
     private var activeDialog: AlertDialog? = null
     private var espai: Int? = null
     private var event: Event? = null
+    private var espaiId: Int? = null
+    private var id: Int? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -150,10 +160,111 @@ class EventDetailsActivity : AppCompatActivity() {
             buyButton.isFocusable = true
 
             buyButton.setOnClickListener {
-                //TODO
+                lifecycleScope.launch {
+                    try {
+                        val response = RetrofitClient.instance.getAvailableSeats(id!!)
+                        if (response.isSuccessful) {
+                            val seatResponses = response.body() ?: emptyList()
+
+                            if (seatResponses.isNotEmpty()) {
+                                // Construir opciones de asiento, usando "Random seat" si la lista contiene solo un 0
+                                val seatOptions =
+                                    if (seatResponses.size == 1 && seatResponses[0] == 0) {
+                                        arrayOf("Random seat")
+                                    } else {
+                                        seatResponses.mapIndexed { index, _ -> "Seat ${index + 1}" }
+                                            .toTypedArray()
+                                    }
+
+                                withContext(Dispatchers.Main) {
+                                    AlertDialog.Builder(this@EventDetailsActivity)
+                                        .setTitle("Selecciona un asiento")
+                                        .setItems(seatOptions) { dialog, which ->
+                                            val selectedSeat = seatResponses[which]
+
+                                            val currentDate = SimpleDateFormat(
+                                                "yyyy-MM-dd'T'HH:mm:ss",
+                                                Locale.getDefault()
+                                            ).format(Date())
+
+                                            val reserva = ReservationRequest(
+                                                eventoId = id!!,
+                                                butacaId = if (selectedSeat == 0) null else selectedSeat,
+                                                fechaReserva = currentDate,
+                                                userId = MainActivity.UserSession.id!!
+                                            )
+
+                                            lifecycleScope.launch {
+                                                try {
+                                                    val reservaResponse =
+                                                        RetrofitClient.instance.createReservation(
+                                                            reserva
+                                                        )
+                                                    if (reservaResponse.isSuccessful) {
+                                                        val reserva = reservaResponse.body()
+                                                        Toast.makeText(
+                                                            this@EventDetailsActivity,
+                                                            "Reserva creada con éxito",
+                                                            Toast.LENGTH_LONG
+                                                        ).show()
+                                                        Log.d(TAG, "Reserva exitosa: $reserva")
+                                                    } else {
+                                                        Toast.makeText(
+                                                            this@EventDetailsActivity,
+                                                            "Este usuario ya tiene una reserva",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        Log.e(
+                                                            TAG,
+                                                            "Respuesta error: ${
+                                                                reservaResponse.errorBody()
+                                                                    ?.string()
+                                                            }"
+                                                        )
+                                                    }
+                                                } catch (e: Exception) {
+                                                    Log.e(
+                                                        TAG,
+                                                        "Excepción al crear reserva: ${e.message}"
+                                                    )
+                                                    Toast.makeText(
+                                                        this@EventDetailsActivity,
+                                                        "Fallo al enviar reserva",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
+
+                                            Log.e("Reserva", reserva.toString())
+                                        }
+                                        .setNegativeButton("Cancelar", null)
+                                        .show()
+                                }
+                            } else {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        this@EventDetailsActivity,
+                                        "No hay asientos disponibles",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error: ${e.message}")
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                this@EventDetailsActivity,
+                                "Error al obtener asientos",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
             }
         }
     }
+
 
     private fun showDateTimePicker() {
         val calendar = Calendar.getInstance()
@@ -324,8 +435,8 @@ class EventDetailsActivity : AppCompatActivity() {
         val rawDate = intent.getStringExtra("raw_date") ?: ""
         val location = intent.getStringExtra("location") ?: ""
         val organizer = intent.getIntExtra("organizer", 0)
-        val id = intent.getIntExtra("event_id", 0)
-        val espaiId = intent.getIntExtra("espai_id", 0)
+        id = intent.getIntExtra("event_id", 0)
+        espaiId = intent.getIntExtra("espai_id", 0)
 
         val parts = location.split(",", limit = 2)
         cityText.text = parts.getOrNull(0)?.trim() ?: "Desconocido"
@@ -375,5 +486,6 @@ class EventDetailsActivity : AppCompatActivity() {
             }
         }
     }
+
 
 }

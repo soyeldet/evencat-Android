@@ -1,4 +1,4 @@
-package com.example.evencat_android
+package com.example.evencat_android.activities
 
 import android.content.Context
 import android.content.Intent
@@ -15,9 +15,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.evencat_android.R
 import com.example.evencat_android.RetrofitClient
 import com.example.evencat_android.User
 import com.example.evencat_android.UserLogin
@@ -28,10 +27,13 @@ import org.bouncycastle.crypto.params.KeyParameter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Base64
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private val secretKey = "999a999ale469993"
     private var shouldRememberUser = true
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         window.statusBarColor = Color.TRANSPARENT
 
-
+        setLocale(this, getSavedLanguage(this))
 
         val buttonSingIn: Button = findViewById(R.id.sing_in_button)
         val buttonSingUp: Button = findViewById(R.id.sing_up_button)
@@ -151,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         var length = blockCipher.processBytes(inputBytes, 0, inputBytes.size, outputBytes, 0)
         length += blockCipher.doFinal(outputBytes, length)
 
-        return java.util.Base64.getEncoder().encodeToString(outputBytes.copyOf(length))
+        return Base64.getEncoder().encodeToString(outputBytes.copyOf(length))
     }
 
     object UserSession {
@@ -173,7 +175,7 @@ class MainActivity : AppCompatActivity() {
             UserSession.description = description
             UserSession.isLoggedIn = true
 
-            val sharedPref = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+            val sharedPref = context.getSharedPreferences("UserSession", MODE_PRIVATE)
             with(sharedPref.edit()) {
                 putInt("id", id)
                 putString("username", username)
@@ -187,7 +189,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun loadUserData(context: Context) {
-            val sharedPref = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+            val sharedPref = context.getSharedPreferences("UserSession", MODE_PRIVATE)
             id = sharedPref.getInt("id", 0)
             email = sharedPref.getString("email", null)
             password = sharedPref.getString("password", null)
@@ -206,7 +208,7 @@ class MainActivity : AppCompatActivity() {
             description = null
             isLoggedIn = false
 
-            val sharedPref = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+            val sharedPref = context.getSharedPreferences("UserSession", MODE_PRIVATE)
             with(sharedPref.edit()) {
                 clear()
                 apply()
@@ -215,7 +217,7 @@ class MainActivity : AppCompatActivity() {
 
         // Esta función es opcional; solo útil si necesitas actualizar parcialmente
         fun saveSession(context: Context) {
-            val sharedPref = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+            val sharedPref = context.getSharedPreferences("UserSession", MODE_PRIVATE)
             with(sharedPref.edit()) {
                 putString("username", username)
                 putString("description", description)
@@ -223,4 +225,40 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun attachBaseContext(newBase: Context) {
+        val lang = newBase.getSharedPreferences("settings", MODE_PRIVATE).getString("lang", "es") ?: "es"
+        val context = updateBaseContextLocale(newBase, lang)
+        super.attachBaseContext(context)
+    }
+
+    fun updateBaseContextLocale(context: Context, language: String): Context {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+
+        val config = context.resources.configuration
+        config.setLocale(locale)
+        config.setLayoutDirection(locale)
+
+        return context.createConfigurationContext(config)
+    }
+
+    fun setLocale(context: Context, language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+
+        val resources = context.resources
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
+        val prefs = context.getSharedPreferences("settings", MODE_PRIVATE)
+        prefs.edit().putString("lang", language).apply()
+    }
+
+    fun getSavedLanguage(context: Context): String {
+        val prefs = context.getSharedPreferences("settings", MODE_PRIVATE)
+        return prefs.getString("lang", "es") ?: "es"
+    }
+
 }

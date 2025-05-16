@@ -1,10 +1,9 @@
-package com.example.evencat_android
+package com.example.evencat_android.activities
 
 import android.content.Intent
 import java.text.SimpleDateFormat
 import java.util.Locale
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -22,7 +21,12 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.evencat_android.EventAdapter.Event
+import com.example.evencat_android.adapters.Event2
+import com.example.evencat_android.adapters.Event2Adapter
+import com.example.evencat_android.adapters.EventAdapter
+import com.example.evencat_android.adapters.EventAdapter.Event
+import com.example.evencat_android.R
+import com.example.evencat_android.RetrofitClient
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.launch
 
@@ -57,6 +61,7 @@ class ExploreActivity : AppCompatActivity() {
         val buttonExit: Button = findViewById(R.id.exit)
         val username: TextView = findViewById(R.id.username)
         username.setText(MainActivity.UserSession.username.toString())
+        val buttonSettings: Button = findViewById(R.id.settings)
 
         buttonExit.setOnClickListener {
             MainActivity.UserSession.clearSession(this)
@@ -66,6 +71,11 @@ class ExploreActivity : AppCompatActivity() {
             startActivity(intent)
 
             finish()
+        }
+
+        buttonSettings.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         buttonExplore.setOnClickListener {

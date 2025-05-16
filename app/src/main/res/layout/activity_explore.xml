@@ -17,7 +17,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExploreActivity"
+    tools:context=".activities.ExploreActivity"
     android:orientation="vertical"
     android:background="@color/white"
 
@@ -101,7 +101,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upcoming events"
+            android:text="@string/ucpoming_events"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="40dp"
             android:fontFamily="@font/poppins_medium"
@@ -112,7 +112,7 @@
             android:id="@+id/see_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="See All >"
+            android:text="@string/see_all"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/light_gray_login_text"
             android:textSize="15sp"
@@ -150,7 +150,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Invite your firends"
+            android:text="@string/invite_friends"
             android:layout_marginTop="48dp"
             android:layout_marginLeft="60dp"
             android:fontFamily="@font/poppins_medium"
@@ -164,7 +164,7 @@
             android:gravity="center"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="60dp"
-            android:text="Invite"
+            android:text="@string/invite"
             android:background="@drawable/rounded_button_invite"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/white"
@@ -187,7 +187,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nearby You"
+            android:text="@string/nearby_you"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="40dp"
             android:fontFamily="@font/poppins_medium"
