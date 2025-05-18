@@ -72,6 +72,16 @@
                 android:padding="10dp"/>
 
             <ImageButton
+                android:id="@+id/buttonRecord"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/microfono"
+                android:background="@android:color/transparent"
+                app:tint="@color/dark_purple"
+                android:layout_marginLeft="10dp"
+                android:contentDescription="Record Audio" />
+
+            <ImageButton
                 android:id="@+id/buttonSend"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -81,6 +91,7 @@
                 android:contentDescription="Enviar"
                 android:background="@android:color/transparent"
                 app:tint="@color/dark_purple"/>
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

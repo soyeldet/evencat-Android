@@ -1,23 +1,27 @@
+import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.os.Build
+import android.util.Base64
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.example.evencat_android.MessageResponse
 import com.example.evencat_android.SocketsDTO
 import com.example.evencat_android.activities.BlowfishHelper
-import com.example.evencat_android.activities.BlowfishHelper.encryptMessage
+import com.example.evencat_android.activities.ChatActivity
 import com.google.gson.Gson
 import java.io.*
 import java.net.Socket
 
 class SocketClient(
+    private val context: ChatActivity,
     private val userId: Int,
     private val chatId: Int,
-    private val onMessageReceived: (String, Int) -> Unit
+    private val onMessageReceived: (String, Int, Boolean, ByteArray?) -> Unit
 ) {
     private var socket: Socket? = null
     private var writer: BufferedWriter? = null
     private var reader: BufferedReader? = null
 
+    @SuppressLint("NewApi")
     fun connect() {
         Thread {
             try {
@@ -25,61 +29,86 @@ class SocketClient(
                 writer = BufferedWriter(OutputStreamWriter(socket!!.getOutputStream()))
                 reader = BufferedReader(InputStreamReader(socket!!.getInputStream()))
 
-                // Enviar datos iniciales
                 val init = SocketsDTO(userId, chatId, null)
-                val initJson = Gson().toJson(init)
-                writer?.write(initJson + "\n")
+                writer?.write(Gson().toJson(init) + "\n")
                 writer?.flush()
 
-                Log.d("SocketClient", "Conexión establecida y datos iniciales enviados.")
+                Log.d("SocketClient", "Conexión establecida.")
 
-                // Leer mensajes
                 var line: String?
                 while (reader?.readLine().also { line = it } != null) {
                     val json = line ?: continue
-                    Log.d("SocketClient", "Mensaje recibido (JSON): $json")
+                    val obj = Gson().fromJson(json, MessageResponse::class.java)
+                    val rawContent = obj.content ?: continue
 
-                    try {
-                        val obj = Gson().fromJson(json, MessageResponse::class.java)
-                        if (obj.type == "message") {
-                            val encrypted = obj.content ?: ""
-                            val decrypted = try {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    BlowfishHelper.decryptMessage(encrypted)
-                                } else {
-                                    TODO("VERSION.SDK_INT < O")
+                    when (obj.type) {
+                        "message" -> {
+                            var text = obj.content ?: ""
+                            try {
+                                text = BlowfishHelper.decryptMessage(text)
+                                Log.d("SocketClient", "Mensaje listo para UI: $text")
+                                context.runOnUiThread {
+                                    onMessageReceived(text, obj.from ?: 0, false, null)
                                 }
                             } catch (e: Exception) {
-                                Log.e("SocketClient", "Error al desencriptar mensaje: ${e.message}")
-                                encrypted // fallback al texto original
+                                Log.e("SocketClient", "Error al desencriptar", e)
                             }
-
-                            Log.d("SocketClient", "Mensaje descifrado: $decrypted | De: ${obj.from}")
-                            onMessageReceived(decrypted, obj.from)
                         }
-                    } catch (e: Exception) {
-                        Log.e("SocketClient", "Error al parsear JSON: $json\nExcepción: ${e.message}")
+                        "audio" -> {
+                            val audioBase64 = obj.content ?: ""
+                            try {
+                                val audioBytes = Base64.decode(audioBase64, Base64.DEFAULT)
+                                Log.d("SocketClient", "Audio recibido, tamaño: ${audioBytes.size}")
+                                onMessageReceived("", obj.from ?: 0, true, audioBytes)
+                            } catch (e: Exception) {
+                                Log.e("SocketClient", "Error decodificando audio base64: ${e.message}")
+                            }
+                        }
+                        else -> {
+                            Log.w("SocketClient", "Tipo de mensaje desconocido: ${obj.type}")
+                        }
                     }
                 }
             } catch (e: Exception) {
-                Log.e("SocketClient", "Connection error: ${e.message}")
+                Log.e("SocketClient", "Error de conexión: ${e.message}")
+            }
+        }.start()
+    }
+
+    fun sendMessage(content: String) {
+        Thread {
+            try {
+                val encryptedContent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    BlowfishHelper.encryptMessage(content)
+                else content
+
+                val dto = SocketsDTO(userId, chatId, encryptedContent, type = "message")
+                val json = Gson().toJson(dto)
+                writer?.write(json + "\n")
+                writer?.flush()
+
+                // Mostrar mensaje en la UI inmediatamente después de enviarlo
+                context.runOnUiThread {
+                    onMessageReceived(content, userId, false, null)
+                }
+
+            } catch (e: Exception) {
+                Log.e("SocketClient", "Error al enviar mensaje: ${e.message}")
             }
         }.start()
     }
 
 
-    fun sendMessage(content: String) {
+    fun sendAudio(audioBytes: ByteArray) {
         Thread {
             try {
-                val dto = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    SocketsDTO(userId, chatId, encryptMessage(content))
-                } else {
-                }
+                val base64Audio = Base64.encodeToString(audioBytes, Base64.NO_WRAP)
+                val dto = SocketsDTO(userId, chatId, base64Audio, type = "audio")
                 val json = Gson().toJson(dto)
                 writer?.write(json + "\n")
                 writer?.flush()
             } catch (e: Exception) {
-                Log.e("SocketClient", "Send error: ${e.message}")
+                Log.e("SocketClient", "Error al enviar audio: ${e.message}")
             }
         }.start()
     }
@@ -90,7 +119,9 @@ class SocketClient(
             reader?.close()
             socket?.close()
         } catch (e: Exception) {
-            Log.e("SocketClient", "Disconnect error: ${e.message}")
+            Log.e("SocketClient", "Error al desconectar: ${e.message}")
         }
     }
+
+
 }

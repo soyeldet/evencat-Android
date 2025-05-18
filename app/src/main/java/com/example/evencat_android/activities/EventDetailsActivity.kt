@@ -7,17 +7,23 @@ import android.app.TimePickerDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.text.format.DateUtils.formatDateTime
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.evencat_android.Event
 import com.example.evencat_android.EventRequest
 import com.example.evencat_android.R
 import com.example.evencat_android.ReservationRequest
 import com.example.evencat_android.RetrofitClient
+import com.example.evencat_android.activities.UserEventsActivity
+import com.example.evencat_android.adapters.Event2
+import com.example.evencat_android.adapters.Event2Adapter
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -37,6 +43,7 @@ class EventDetailsActivity : AppCompatActivity() {
     private lateinit var locationText: TextView
     private lateinit var eventName: TextView
     private lateinit var eventDescription: TextView
+    private lateinit var organizer_picture: CircleImageView
     private var activeDialog: AlertDialog? = null
     private var espai: Int? = null
     private var event: Event? = null
@@ -67,6 +74,7 @@ class EventDetailsActivity : AppCompatActivity() {
         dayText = findViewById(R.id.day_text)
         cityText = findViewById(R.id.city_text)
         organizerName = findViewById(R.id.organizer_name)
+        organizer_picture = findViewById(R.id.organizer_picture)
         locationText = findViewById(R.id.location_text)
         eventName = findViewById(R.id.event_name_editText)
         eventDescription = findViewById(R.id.event_description)
@@ -79,7 +87,9 @@ class EventDetailsActivity : AppCompatActivity() {
                 val intent = Intent(this, ChatActivity::class.java)
                 intent.putExtra("chat_id", id)
                 this.startActivity(intent)
-            }
+        }
+
+
 
         if (creatingEvent == 1) {
             // Habilitar edición
@@ -91,6 +101,15 @@ class EventDetailsActivity : AppCompatActivity() {
             eventDescription.apply {
                 isClickable = true
                 isFocusableInTouchMode = true
+            }
+
+            val imageUrl = MainActivity.UserSession.imageUrl
+            if (!imageUrl.isNullOrEmpty()) {
+                Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.profile_p)
+                    .error(R.drawable.profile_p)
+                    .into(organizer_picture)
             }
 
             dateButton.isEnabled = true
@@ -162,6 +181,8 @@ class EventDetailsActivity : AppCompatActivity() {
             buyButton.visibility = View.VISIBLE
             buyButton.isEnabled = true
             buyButton.isFocusable = true
+
+
 
             buyButton.setOnClickListener {
                 lifecycleScope.launch {
@@ -485,11 +506,17 @@ class EventDetailsActivity : AppCompatActivity() {
             try {
                 val organizer = RetrofitClient.instance.getOrganizer(organizerId)
                 organizerName.text = organizer.nombre
+                val organizerPicture = organizer.image_url
+                if (!organizerPicture.isNullOrEmpty()) {
+                    Glide.with(this@EventDetailsActivity)
+                        .load(organizerPicture)
+                        .placeholder(R.drawable.profile_p)
+                        .error(R.drawable.profile_p)
+                        .into(organizer_picture)
+                }
             } catch (_: Exception) {
                 Toast.makeText(this@EventDetailsActivity, "Error cargando organizador", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
-
 }

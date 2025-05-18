@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity() {
             email: String,
             password: String,
             rol: String,
-            description: String,
+            description: String?,
             imageUrl: String?
         ) {
             UserSession.id = id

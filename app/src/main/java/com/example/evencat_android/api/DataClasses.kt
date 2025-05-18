@@ -20,7 +20,8 @@ data class UserLogin(
 
 data class Organizer(
     @SerializedName("UserId") val id: String,
-    @SerializedName("UserName") val nombre: String
+    @SerializedName("UserName") val nombre: String,
+    @SerializedName("ImageUrl") val image_url: String
 )
 
 data class EventRequest(
@@ -87,23 +88,33 @@ data class Butaques(
     val espai_id: Int
 )
 
+data class MessageResponse(
+    val content: String?,
+    val from: Int,
+    val type: String = "message"
+)
+
 data class Message(
-    val text: String,
-    val isSentByUser: Boolean
+    val id: Int,
+    val from: Int,
+    val text: String?, // Null si es audio
+    val audioBytes: ByteArray? = null, // Contiene los bytes del audio si es mensaje de audio
+    val timestamp: String,
+    val isSentByUser: Boolean,
+    val isAudio: Boolean = false // Nuevo flag
 )
 
 data class SocketsDTO(
     val sender_id: Int,
     val chat_id: Int,
-    val content: String?
+    val content: String?,
+    val type: String = "message"
 )
 
-data class MessageResponse(
-    val type: String,
-    val message_id: Int,
-    val from: Int,
-    val content: String?,
-    val timestamp: String
+class SocketClient(
+    private val userId: Int,
+    private val chatId: Int,
+    private val onMessageReceived: (String?, Int, Boolean, ByteArray?) -> Unit
 )
 
 data class UploadResponse(
