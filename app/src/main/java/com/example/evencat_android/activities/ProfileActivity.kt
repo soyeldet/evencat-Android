@@ -38,7 +38,12 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
+/**
+ * Actividad de perfil de usuario.
+ * Permite al usuario ver y editar su perfil, cambiar su imagen, y gestionar sus amigos.
+ */
 class ProfileActivity : AppCompatActivity() {
+
     private val REQUEST_IMAGE_CAPTURE = 1
     private val REQUEST_IMAGE_PICK = 2
     private var imageUri: Uri? = null
@@ -47,9 +52,14 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var buttonProfile2: CircleImageView
     private lateinit var FriendsRV: RecyclerView
 
+    /**
+     * Se ejecuta al crear la actividad.
+     * Inicializa la vista, establece valores del usuario, listeners, y comportamientos interactivos.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -59,14 +69,14 @@ class ProfileActivity : AppCompatActivity() {
 
         var editing = false
 
+        // Referencias a elementos de la interfaz
         val imageButtonMenu: ImageButton = findViewById(R.id.menu_image_utton)
         val nameText: EditText = findViewById(R.id.nameText)
         val descriptionText: EditText = findViewById(R.id.descriptionText)
         val editTextProfile: TextView = findViewById(R.id.editProfileText)
         val iconEditProfile: ImageView = findViewById(R.id.iconEditProfile)
-        FriendsRV = findViewById(R.id.friendsRView)
-        val editProfile: Button = findViewById(R.id.editProfile)
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val editProfile: Button = findViewById(R.id.editProfile)
         val buttonSettings: Button = findViewById(R.id.settings)
         val add_friends: Button = findViewById(R.id.add_friends)
 
@@ -80,189 +90,97 @@ class ProfileActivity : AppCompatActivity() {
 
         profileImageView = findViewById(R.id.porfile_picture)
 
+        /**
+         * Carga la imagen del usuario en el perfil.
+         */
         val imageUrl = MainActivity.UserSession.imageUrl
         if (!imageUrl.isNullOrEmpty()) {
-            Glide.with(this)
-                .load(imageUrl)
-                .placeholder(R.drawable.profile_p)
-                .error(R.drawable.profile_p)
-                .into(profileImageView)
+            Glide.with(this).load(imageUrl).placeholder(R.drawable.profile_p)
+                .error(R.drawable.profile_p).into(profileImageView)
+            Glide.with(this).load(imageUrl).into(buttonProfile2)
         }
 
-        if (!imageUrl.isNullOrEmpty()) {
-            Glide.with(this)
-                .load(imageUrl)
-                .placeholder(R.drawable.profile_p)
-                .error(R.drawable.profile_p)
-                .into(buttonProfile2)
-        }
-
+        /**
+         * Permite cambiar la imagen de perfil.
+         */
         profileImageView.setOnClickListener {
             showImagePickerDialog()
         }
 
+        /**
+         * Cierra sesión del usuario y vuelve a la pantalla principal.
+         */
         buttonExit.setOnClickListener {
             MainActivity.UserSession.clearSession(this)
-
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-
             finish()
         }
 
-        buttonSettings.setOnClickListener{
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
+        // Navegación del menú lateral
+        buttonSettings.setOnClickListener { startActivity(Intent(this, SettingsActivity::class.java)) }
+        buttonExplore.setOnClickListener { startActivity(Intent(this, ExploreActivity::class.java)) }
+        buttonEvents.setOnClickListener { startActivity(Intent(this, UserEventsActivity::class.java)) }
+        buttonProfile.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
+        buttonProfile2.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
+        imageButtonMenu.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
 
-        buttonExplore.setOnClickListener{
-            val intent = Intent(this, ExploreActivity::class.java)
-            startActivity(intent)
-        }
-
-        buttonEvents.setOnClickListener{
-            val intent = Intent(this, UserEventsActivity::class.java)
-            startActivity(intent)
-        }
-
-        buttonProfile.setOnClickListener{
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
-
-        buttonProfile2.setOnClickListener{
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
-
-        imageButtonMenu.setOnClickListener{
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
-
+        // Configuración inicial de campos y RV
         nameText.setText(MainActivity.UserSession.username)
         descriptionText.setText(MainActivity.UserSession.description)
-        FriendsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        FriendsRV = findViewById(R.id.friendsRView)
         FriendsRV.layoutManager = GridLayoutManager(this, 4)
-
         loadFriends()
 
-        nameText.isFocusable = false
-        nameText.isClickable = false
-        nameText.isFocusableInTouchMode = false
-        nameText.setCursorVisible(false)
+        // Deshabilitar edición por defecto
+        disableEditing(nameText, descriptionText, profileImageView, add_friends)
 
-        descriptionText.isFocusable = false
-        descriptionText.isClickable = false
-        descriptionText.isFocusableInTouchMode = false
-        descriptionText.setCursorVisible(false)
-
-        profileImageView.isClickable = false
-        profileImageView.isFocusable = false
-        profileImageView.isEnabled = false
-
-        add_friends.isClickable = false
-        add_friends.isFocusable = false
-        add_friends.isEnabled = false
-
-        FriendsRV.setOnTouchListener { _, _ -> false }
-
+        /**
+         * Alterna entre modo edición y modo visualización del perfil.
+         */
         editProfile.setOnClickListener {
-            if (!editing){
+            if (!editing) {
                 editing = true
+                enableEditing(nameText, descriptionText, profileImageView, add_friends)
                 iconEditProfile.isVisible = false
-                editTextProfile.setText("Save")
-
-                nameText.isFocusable = true
-                nameText.isClickable = true
-                nameText.isFocusableInTouchMode = true
-                nameText.setCursorVisible(true)
-
-                descriptionText.isFocusable = true
-                descriptionText.isClickable = true
-                descriptionText.isFocusableInTouchMode = true
-                descriptionText.setCursorVisible(true)
-
-                profileImageView.isClickable = true
-                profileImageView.isFocusable = true
-                profileImageView.isEnabled = true
-
-                FriendsRV.setOnTouchListener { _, _ -> true }
-
-                add_friends.isClickable = true
-                add_friends.isFocusable = true
-                add_friends.isEnabled = true
-
+                editTextProfile.text = getString(R.string.save)
             } else {
                 editing = false
-                editTextProfile.setText("Edit Profile")
-
+                disableEditing(nameText, descriptionText, profileImageView, add_friends)
                 iconEditProfile.isVisible = true
-                nameText.isFocusable = false
-                nameText.isClickable = false
-                nameText.isFocusableInTouchMode = false
-                nameText.setCursorVisible(false)
+                editTextProfile.text = getString(R.string.edit_profile)
 
-                descriptionText.isFocusable = false
-                descriptionText.isClickable = false
-                descriptionText.isFocusableInTouchMode = false
-                descriptionText.setCursorVisible(false)
-
-                profileImageView.isClickable = false
-                profileImageView.isFocusable = false
-                profileImageView.isEnabled = false
-
-                FriendsRV.setOnTouchListener { _, _ -> false }
-
-                add_friends.isClickable = false
-                add_friends.isFocusable = false
-                add_friends.isEnabled = false
-
+                // Guardar cambios
                 lifecycleScope.launch {
                     try {
                         val userId = MainActivity.UserSession.id ?: return@launch
-                        val response = RetrofitClient.instance.updateDescription(userId, descriptionText.text.toString())
-
-                        if (response.isSuccessful) {
-                            MainActivity.UserSession.description = descriptionText.text.toString()
-                        } else {
-                            Log.e("API", "Error al actualizar descripción: ${response.code()}")
-                        }
+                        RetrofitClient.instance.updateDescription(userId, descriptionText.text.toString())
+                        RetrofitClient.instance.updateName(userId, nameText.text.toString())
+                        MainActivity.UserSession.description = descriptionText.text.toString()
+                        MainActivity.UserSession.username = nameText.text.toString()
+                        MainActivity.UserSession.saveSession(this@ProfileActivity)
+                        Toast.makeText(this@ProfileActivity, "Saved", Toast.LENGTH_SHORT).show()
                     } catch (e: Exception) {
-                        Log.e("API", "Excepción al actualizar descripción", e)
+                        Log.e("Profile", "Error al guardar cambios", e)
                     }
                 }
-
-                lifecycleScope.launch {
-                    try {
-                        val userId = MainActivity.UserSession.id ?: return@launch
-                        val response = RetrofitClient.instance.updateName(userId, nameText.text.toString())
-
-                        if (response.isSuccessful) {
-                            MainActivity.UserSession.username = nameText.text.toString()
-                        } else {
-                            Log.e("API", "Error al actualizar descripción: ${response.code()}")
-                        }
-                    } catch (e: Exception) {
-                        Log.e("API", "Excepción al actualizar descripción", e)
-                    }
-                }
-
-                MainActivity.UserSession.description = descriptionText.text.toString()
-                MainActivity.UserSession.username = nameText.text.toString()
-                MainActivity.UserSession.saveSession(this@ProfileActivity)
-                Toast.makeText(this@ProfileActivity, "Saved", Toast.LENGTH_SHORT).show()
-
             }
         }
 
+        /**
+         * Muestra un cuadro de diálogo para añadir amigos.
+         */
         add_friends.setOnClickListener {
             showAddFriendDialog()
         }
-
     }
 
+    /**
+     * Muestra un diálogo para elegir entre cámara o galería.
+     */
     private fun showImagePickerDialog() {
         val options = arrayOf("Hacer una foto", "Seleccionar de galería")
-
         AlertDialog.Builder(this)
             .setTitle("Selecciona una opción")
             .setItems(options) { _, which ->
@@ -270,35 +188,41 @@ class ProfileActivity : AppCompatActivity() {
                     0 -> openCamera()
                     1 -> openGallery()
                 }
-            }
-            .show()
+            }.show()
     }
 
+    /**
+     * Abre la cámara del dispositivo.
+     */
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        imageUri = FileProvider.getUriForFile(
-            this,
-            "${packageName}.provider", // asegúrate que coincida con el `provider` de AndroidManifest
-            createImageFile()
-        )
+        imageUri = FileProvider.getUriForFile(this, "${packageName}.provider", createImageFile())
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
     }
 
+    /**
+     * Abre la galería para seleccionar una imagen.
+     */
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
         startActivityForResult(intent, REQUEST_IMAGE_PICK)
     }
 
+    /**
+     * Crea un archivo temporal para almacenar la imagen tomada por la cámara.
+     */
     private fun createImageFile(): File {
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile("IMG_", ".jpg", storageDir)
     }
 
+    /**
+     * Maneja el resultado de seleccionar o tomar una imagen.
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == RESULT_OK) {
             val uri = when (requestCode) {
                 REQUEST_IMAGE_CAPTURE -> imageUri
@@ -307,133 +231,78 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             uri?.let {
-                profileImageView.setImageURI(it) // Mostrar en el ImageView
+                profileImageView.setImageURI(it)
                 buttonProfile2.setImageURI(it)
-                uploadImageWithLifecycle(it)     // Subir al servidor
+                uploadImageWithLifecycle(it)
             }
         }
     }
 
+    /**
+     * Sube la imagen seleccionada al servidor y actualiza el perfil.
+     */
     private fun uploadImageWithLifecycle(uri: Uri) {
         lifecycleScope.launch {
             try {
                 val mimeType = contentResolver.getType(uri) ?: "image/*"
-                val fileExtension = when (mimeType) {
+                val ext = when (mimeType) {
                     "image/jpeg" -> ".jpg"
                     "image/png" -> ".png"
                     else -> ".bin"
                 }
+                contentResolver.openInputStream(uri)?.use { input ->
+                    val tempFile = File.createTempFile("upload_", ext, cacheDir).apply { deleteOnExit() }
+                    input.copyTo(tempFile.outputStream())
 
-                contentResolver.openInputStream(uri)?.use { inputStream ->
-                    val tempFile = File.createTempFile("upload_", fileExtension, cacheDir).apply {
-                        deleteOnExit()
-                    }
+                    val body = tempFile.asRequestBody(mimeType.toMediaTypeOrNull())
+                    val part = MultipartBody.Part.createFormData("file", "image_${System.currentTimeMillis()}$ext", body)
+                    val response = RetrofitClient.instance.uploadImage(part)
 
-                    inputStream.copyTo(tempFile.outputStream())
+                    if (response.isSuccessful) {
+                        imageUrlNew = response.body()?.url ?: ""
+                        MainActivity.UserSession.imageUrl = imageUrlNew
+                        MainActivity.UserSession.saveSession(this@ProfileActivity)
+                        Toast.makeText(this@ProfileActivity, "Imagen actualizada", Toast.LENGTH_SHORT).show()
 
-                    val requestBody = tempFile.asRequestBody(mimeType.toMediaTypeOrNull())
-                    val multipart = MultipartBody.Part.createFormData(
-                        "file",
-                        "image_${System.currentTimeMillis()}$fileExtension",
-                        requestBody
-                    )
-
-                    val response = try {
-                        RetrofitClient.instance.uploadImage(multipart)
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            this@ProfileActivity,
-                            "Network error: ${e.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@launch
-                    }
-
-                    when {
-                        response.isSuccessful -> {
-                            imageUrlNew = response.body()?.url ?: ""
-                            Toast.makeText(
-                                this@ProfileActivity,
-                                "Imagen subida: $imageUrlNew",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            lifecycleScope.launch {
-                                try {
-                                    val userId = MainActivity.UserSession.id ?: return@launch
-                                    val response = RetrofitClient.instance.updateImageUrl(userId, imageUrlNew)
-
-                                    if (response.isSuccessful) {
-                                        MainActivity.UserSession.imageUrl = imageUrlNew
-                                        MainActivity.UserSession.saveSession(this@ProfileActivity)
-                                        Toast.makeText(this@ProfileActivity, "Imagen actualizada", Toast.LENGTH_SHORT).show()
-                                    } else {
-                                        Log.e("API", "Error al actualizar imagen: ${response.code()}")
-                                    }
-                                } catch (e: Exception) {
-                                    Log.e("API", "Excepción al actualizar imagen", e)
-                                }
-                            }
-                            MainActivity.UserSession.imageUrl = imageUrlNew
-                            MainActivity.UserSession.saveSession(this@ProfileActivity)
-
-                        }
-
-                        response.code() == 400 -> {
-                            val errorBody = response.errorBody()?.string()
-                            Log.e("Upload Error", "400 Bad Request: $errorBody")
-                            Toast.makeText(
-                                this@ProfileActivity,
-                                "Error del servidor: ${errorBody ?: "Formato inválido"}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-
-                        else -> {
-                            Toast.makeText(
-                                this@ProfileActivity,
-                                "Error ${response.code()}: ${response.message()}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+                        RetrofitClient.instance.updateImageUrl(MainActivity.UserSession.id!!, imageUrlNew)
+                    } else {
+                        Toast.makeText(this@ProfileActivity, "Error al subir imagen: ${response.code()}", Toast.LENGTH_LONG).show()
                     }
                 }
             } catch (e: Exception) {
-                Toast.makeText(
-                    this@ProfileActivity,
-                    "Error: ${e.localizedMessage}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@ProfileActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    /**
+     * Muestra un diálogo para introducir un ID de amigo y enviarlo.
+     */
     private fun showAddFriendDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Añadir amigo")
-
-        val input = EditText(this)
-        input.hint = "ID del amigo"
-        input.inputType = android.text.InputType.TYPE_CLASS_NUMBER
-        builder.setView(input)
-
-        builder.setPositiveButton("Añadir") { dialog, _ ->
-            val friendIdStr = input.text.toString()
-            val friendId = friendIdStr.toIntOrNull()
-
-            if (friendId == null) {
-                Toast.makeText(this, "ID inválido", Toast.LENGTH_SHORT).show()
-                return@setPositiveButton
-            }
-
-            addFriendApi(friendId)
-            dialog.dismiss()
+        val input = EditText(this).apply {
+            hint = "ID del amigo"
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER
         }
 
-        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
-
-        builder.show()
+        AlertDialog.Builder(this)
+            .setTitle("Añadir amigo")
+            .setView(input)
+            .setPositiveButton("Añadir") { dialog, _ ->
+                val id = input.text.toString().toIntOrNull()
+                if (id == null) {
+                    Toast.makeText(this, "ID inválido", Toast.LENGTH_SHORT).show()
+                } else {
+                    addFriendApi(id)
+                    dialog.dismiss()
+                }
+            }
+            .setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
+            .show()
     }
 
+    /**
+     * Envía una solicitud al servidor para añadir a un amigo.
+     */
     private fun addFriendApi(friendId: Int) {
         lifecycleScope.launch {
             try {
@@ -443,10 +312,9 @@ class ProfileActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     Toast.makeText(this@ProfileActivity, "Amigo añadido", Toast.LENGTH_SHORT).show()
-                    // Opcional: recarga la lista de amigos aquí
                     loadFriends()
                 } else {
-                    Toast.makeText(this@ProfileActivity, "Error al añadir amigo: ${response.code()}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@ProfileActivity, "Error: ${response.code()}", Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@ProfileActivity, "Error de red: ${e.message}", Toast.LENGTH_LONG).show()
@@ -454,6 +322,9 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carga la lista de amigos del usuario y la muestra en el RecyclerView.
+     */
     private fun loadFriends() {
         lifecycleScope.launch {
             val userId = MainActivity.UserSession.id ?: return@launch
@@ -465,10 +336,34 @@ class ProfileActivity : AppCompatActivity() {
                         Toast.makeText(this@ProfileActivity, "Amigo seleccionado: ${user.name}", Toast.LENGTH_SHORT).show()
                     }
                 }
-                findViewById<RecyclerView>(R.id.friendsRView).adapter = adapter
+                FriendsRV.adapter = adapter
             }
         }
     }
 
+    /**
+     * Habilita la edición del perfil.
+     */
+    private fun enableEditing(name: EditText, desc: EditText, image: ImageView, addBtn: Button) {
+        name.isFocusableInTouchMode = true
+        desc.isFocusableInTouchMode = true
+        image.isClickable = true
+        addBtn.isEnabled = true
+    }
 
+    /**
+     * Deshabilita la edición del perfil.
+     */
+    private fun disableEditing(name: EditText, desc: EditText, image: ImageView, addBtn: Button) {
+        name.isFocusable = false
+        name.isClickable = false
+        name.setCursorVisible(false)
+
+        desc.isFocusable = false
+        desc.isClickable = false
+        desc.setCursorVisible(false)
+
+        image.isEnabled = false
+        addBtn.isEnabled = false
+    }
 }

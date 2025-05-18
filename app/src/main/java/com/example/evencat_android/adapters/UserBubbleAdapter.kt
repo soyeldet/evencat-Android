@@ -15,25 +15,28 @@ class UserBubbleAdapter(private val userList: List<UserResponse>) :
     private val random = Random()
     private var onItemClick: ((UserResponse) -> Unit)? = null
 
-    // Para manejar clics si es necesario
+    // Permite asignar un listener para clicks en los items
     fun setOnItemClickListener(listener: (UserResponse) -> Unit) {
         onItemClick = listener
-
     }
 
+    // ViewHolder que contiene solo un TextView
     class UserViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView) {
+        // Asigna el nombre del usuario y el color de fondo
         fun bind(user: UserResponse, color: Int) {
             textView.text = user.name
             textView.background.setTint(color)
         }
     }
 
+    // Infla la vista que será un TextView (item_user_bubble)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_user_bubble, parent, false) as TextView
         return UserViewHolder(view)
     }
 
+    // Vincula los datos con la vista y genera un color aleatorio para cada burbuja
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val user = userList[position]
         val color = Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256))
@@ -43,5 +46,4 @@ class UserBubbleAdapter(private val userList: List<UserResponse>) :
     }
 
     override fun getItemCount() = userList.size
-
 }

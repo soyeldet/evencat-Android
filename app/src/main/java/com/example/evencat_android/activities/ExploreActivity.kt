@@ -32,11 +32,19 @@ import com.example.evencat_android.RetrofitClient
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.launch
 
+/**
+ * Actividad principal que muestra eventos en dos categorías:
+ * - Próximos eventos (carousel horizontal)
+ * - Eventos cercanos (lista vertical)
+ * También incluye un menú lateral con opciones de navegación.
+ */
 class ExploreActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_explore)
 
+        // Configurar edge-to-edge display (para aprovechar toda la pantalla)
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -44,7 +52,7 @@ class ExploreActivity : AppCompatActivity() {
             insets
         }
 
-
+        // Obtener referencias a los elementos de la UI
         val imageButtonMenu: ImageButton = findViewById(R.id.menu_image_utton)
         val upcomingEventsRV: RecyclerView = findViewById(R.id.upcomingEvents)
         val nearbyYouRV: RecyclerView = findViewById(R.id.nearbyYouRV)
@@ -55,16 +63,19 @@ class ExploreActivity : AppCompatActivity() {
         val icSearch: ImageView = findViewById(R.id.ic_search)
         val seeAll: TextView = findViewById(R.id.see_all)
 
-
+        // Elementos del menú lateral
         val buttonExplore: Button = findViewById(R.id.explore_button_menu)
         val buttonEvents: Button = findViewById(R.id.events_button_menu)
         val buttonProfile: Button = findViewById(R.id.profile_button_menu)
         val buttonProfile2: CircleImageView = findViewById(R.id.profile_image_button)
         val buttonExit: Button = findViewById(R.id.exit)
         val username: TextView = findViewById(R.id.username)
-        username.setText(MainActivity.UserSession.username.toString())
         val buttonSettings: Button = findViewById(R.id.settings)
 
+        // Mostrar nombre de usuario
+        username.setText(MainActivity.UserSession.username.toString())
+
+        // Cargar imagen de perfil si está disponible
         val imageUrl = MainActivity.UserSession.imageUrl
         if (!imageUrl.isNullOrEmpty()) {
             Glide.with(this)
@@ -74,17 +85,17 @@ class ExploreActivity : AppCompatActivity() {
                 .into(buttonProfile2)
         }
 
+        // Configurar listeners para los botones del menú lateral
         buttonExit.setOnClickListener {
+            // Cerrar sesión y volver a MainActivity
             MainActivity.UserSession.clearSession(this)
-
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-
             finish()
         }
 
-        buttonSettings.setOnClickListener{
+        buttonSettings.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
@@ -108,6 +119,7 @@ class ExploreActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Configurar botones de búsqueda y "Ver todos"
         buttonSearch.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
@@ -118,22 +130,28 @@ class ExploreActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Configurar layout managers para los RecyclerViews
         upcomingEventsRV.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         nearbyYouRV.layoutManager = LinearLayoutManager(this)
 
+        // Obtener eventos desde la API
         getEventsFromApi(upcomingEventsRV, nearbyYouRV)
 
+        // Configurar botón del menú
         imageButtonMenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        // Configurar visibilidad del botón de añadir según el rol del usuario
         if (MainActivity.UserSession.rol == "UsuariNormal") {
+            // Ocultar botón de añadir para usuarios normales
             icAdd.visibility = View.GONE
             icAdd.isEnabled = false
             buttonAdd.visibility = View.GONE
             buttonAdd.isEnabled = false
 
+            // Ajustar posición de los elementos de búsqueda
             val layoutParams = icSearch.layoutParams as FrameLayout.LayoutParams
             layoutParams.gravity = Gravity.RIGHT
             layoutParams.marginEnd = 45
@@ -144,26 +162,31 @@ class ExploreActivity : AppCompatActivity() {
             layoutParams2.marginEnd = 45
             buttonSearch.layoutParams = layoutParams2
         } else {
+            // Mostrar botón de añadir para organizadores/administradores
             buttonAdd.setOnClickListener {
                 val intent = Intent(this, EventDetailsActivity::class.java)
-                intent.putExtra("creatingEvent", 1)
+                intent.putExtra("creatingEvent", 1) // Modo creación de evento
                 startActivity(intent)
             }
         }
     }
 
+    /**
+     * Obtiene eventos desde la API y los muestra en los RecyclerViews
+     */
     private fun getEventsFromApi(upcomingEventsRV: RecyclerView, nearbyYouRV: RecyclerView) {
         lifecycleScope.launch {
             try {
                 val apiService = RetrofitClient.instance
                 val eventsResponse = apiService.getEvents()
 
-                // Listas separadas para cada tipo de evento
+                // Listas para almacenar los eventos procesados
                 val upcomingEvents = mutableListOf<Event>()
                 val nearbyEvents = mutableListOf<Event2>()
 
+                // Procesar cada evento de la respuesta
                 eventsResponse.forEach { event ->
-                    // Datos comunes para ambos eventos
+                    // Obtener información adicional del espacio y organizador
                     val espai = try {
                         apiService.getEspais(event.espai_id)
                     } catch (e: Exception) {
@@ -176,7 +199,7 @@ class ExploreActivity : AppCompatActivity() {
                         "Desconocido"
                     }
 
-                    // Procesar fecha para Event (Upcoming)
+                    // Formatear fecha para Event (Upcoming)
                     val formattedDateUpcoming = if (!event.date.isNullOrBlank()) {
                         try {
                             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
@@ -190,11 +213,12 @@ class ExploreActivity : AppCompatActivity() {
                         "01 JAN"
                     }
 
+                    // Separar día y mes
                     val dayMonthParts = formattedDateUpcoming.split(" ")
                     val day = dayMonthParts.getOrNull(0) ?: "01"
                     val month = dayMonthParts.getOrNull(1) ?: "JAN"
 
-                    // Crear objeto Event para Upcoming
+                    // Crear objeto Event para el carousel de próximos eventos
                     upcomingEvents.add(
                         Event(
                             id = event.id,
@@ -210,18 +234,18 @@ class ExploreActivity : AppCompatActivity() {
                         )
                     )
 
-                    // Procesar fecha para Event2 (Nearby)
+                    // Formatear fecha para Event2 (Nearby)
                     val formattedDateNearby = formatDateTime(event.date ?: "")
 
-                    // Extraer ciudad y dirección
+                    // Extraer ciudad de la ubicación
                     val ubicacion = espai?.ubicacio ?: ""
                     val parts = ubicacion.split(",", limit = 2)
                     val city = parts.getOrNull(0)?.trim() ?: "Desconocido"
 
-                    // Crear objeto Event2 para Nearby
+                    // Crear objeto Event2 para la lista de eventos cercanos
                     nearbyEvents.add(
                         Event2(
-                            id = event.id,  // ¡Añadir ID!
+                            id = event.id,
                             title = event.name ?: "Sin título",
                             description = event.description ?: "Sin descripción",
                             date = formattedDateNearby,
@@ -236,7 +260,7 @@ class ExploreActivity : AppCompatActivity() {
                     )
                 }
 
-                // Configurar adaptadores
+                // Configurar adaptadores con los eventos procesados
                 upcomingEventsRV.adapter = EventAdapter(upcomingEvents).apply {
                     setOnItemClickListener { event -> openEventDetails(event) }
                 }
@@ -251,6 +275,9 @@ class ExploreActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Formatea una fecha en formato "d MMMM - EEE - h:mm a" (ej: "1st January - Mon - 12:00 PM")
+     */
     fun formatDateTime(rawDate: String): String {
         return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
@@ -264,20 +291,26 @@ class ExploreActivity : AppCompatActivity() {
 
             "$day$daySuffix $month - $weekday - $time"
         } catch (e: Exception) {
-            "1st Jan - Mon - 12:00 AM"
+            "1st Jan - Mon - 12:00 AM" // Valor por defecto en caso de error
         }
     }
 
+    /**
+     * Devuelve el sufijo apropiado para el día del mes (st, nd, rd, th)
+     */
     fun getDayOfMonthSuffix(day: Int): String {
         return when {
-            day in 11..13 -> "th"
-            day % 10 == 1 -> "st"
-            day % 10 == 2 -> "nd"
-            day % 10 == 3 -> "rd"
-            else -> "th"
+            day in 11..13 -> "th" // Casos especiales: 11th, 12th, 13th
+            day % 10 == 1 -> "st"  // 1st, 21st, 31st
+            day % 10 == 2 -> "nd"  // 2nd, 22nd
+            day % 10 == 3 -> "rd"  // 3rd, 23rd
+            else -> "th"           // Todos los demás
         }
     }
 
+    /**
+     * Abre EventDetailsActivity para un evento del carousel (tipo Event)
+     */
     private fun openEventDetails(event: Event) {
         val intent = Intent(this, EventDetailsActivity::class.java).apply {
             putExtra("event_id", event.id)
@@ -291,6 +324,9 @@ class ExploreActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    /**
+     * Abre EventDetailsActivity para un evento de la lista (tipo Event2)
+     */
     private fun openEventDetails2(event: Event2) {
         val intent = Intent(this, EventDetailsActivity::class.java).apply {
             putExtra("event_id", event.id)
@@ -306,8 +342,5 @@ class ExploreActivity : AppCompatActivity() {
             putExtra("image_url", event.imageResId)
         }
         startActivity(intent)
-
-
     }
-
 }

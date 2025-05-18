@@ -1,4 +1,4 @@
-package com.example.evencat_android.activities
+package com.example.evencat_android.classes
 
 import android.content.Context
 import java.util.*
