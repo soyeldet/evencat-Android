@@ -147,6 +147,8 @@
             android:layout_marginRight="30dp"
             />
 
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/friendsRView"
             android:layout_width="match_parent"
@@ -161,6 +163,15 @@
             android:clickable="false"
             android:focusable="false"
             />
+
+        <Button
+            android:id="@+id/add_friends"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="590dp"
+            android:layout_marginLeft="30dp"
+            android:background="@android:color/transparent"
+            android:layout_marginRight="30dp"/>
     </FrameLayout>
 
 </LinearLayout>

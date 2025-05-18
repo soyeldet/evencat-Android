@@ -26,6 +26,7 @@ import com.example.evencat_android.adapters.Event2
 import com.example.evencat_android.adapters.Event2Adapter
 import com.example.evencat_android.R
 import com.example.evencat_android.RetrofitClient
+import com.example.evencat_android.activities.EventDetailsActivity
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import de.hdodenhof.circleimageview.CircleImageView
@@ -247,6 +248,7 @@ class UserEventsActivity : AppCompatActivity() {
         val organizer = dialogView.findViewById<TextView>(R.id.text_event_organizer)
         val imageView = dialogView.findViewById<ImageView>(R.id.image_event)
         val closeButton = dialogView.findViewById<Button>(R.id.button_close_dialog)
+        val chatButton = dialogView.findViewById<Button>(R.id.button_chat)
 
         title.text = event.title
         description.text = event.description
@@ -267,6 +269,12 @@ class UserEventsActivity : AppCompatActivity() {
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
+
+        chatButton.setOnClickListener {
+            val intent = Intent(this@UserEventsActivity, ChatActivity::class.java)
+            intent.putExtra("chat_id", event.id)
+            startActivity(intent)
+        }
 
         closeButton.setOnClickListener {
             dialog.dismiss()

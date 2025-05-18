@@ -84,9 +84,35 @@ class EventDetailsActivity : AppCompatActivity() {
         }
 
         chatButton.setOnClickListener {
-                val intent = Intent(this, ChatActivity::class.java)
-                intent.putExtra("chat_id", id)
-                this.startActivity(intent)
+            lifecycleScope.launch {
+                try {
+                    val userId = MainActivity.UserSession.id ?: return@launch
+                    val eventId = id ?: return@launch
+
+                    val response = RetrofitClient.instance.checkReservation(userId, eventId)
+                    withContext(Dispatchers.Main) {
+                        if (response.isSuccessful && response.body() == true) {
+                            val intent = Intent(this@EventDetailsActivity, ChatActivity::class.java)
+                            intent.putExtra("chat_id", eventId)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(
+                                this@EventDetailsActivity,
+                                "Necesitas una reserva para acceder al chat",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@EventDetailsActivity,
+                            "Error al verificar la reserva",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
 
 
@@ -192,7 +218,6 @@ class EventDetailsActivity : AppCompatActivity() {
                             val seatResponses = response.body() ?: emptyList()
 
                             if (seatResponses.isNotEmpty()) {
-                                // Construir opciones de asiento, usando "Random seat" si la lista contiene solo un 0
                                 val seatOptions =
                                     if (seatResponses.size == 1 && seatResponses[0] == 0) {
                                         arrayOf("Random seat")

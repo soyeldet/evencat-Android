@@ -123,6 +123,23 @@ data class UploadResponse(
     @SerializedName("url") val url: String
 )
 
+data class UserResponse(
+    @SerializedName("usuari_id") val id: Int,
+    @SerializedName("nom") val name: String,
+)
+
+data class AmicsRequest(
+    @SerializedName("usuari1_id") val usuari1_id: Int,
+    @SerializedName("usuari2_id") val usuari2_id: Int
+)
+
+data class AmicsResponse(
+    @SerializedName("usuari_id") val id: Int,
+    @SerializedName("usuari1_id") val usuari1_id: Int,
+    @SerializedName("usuari2_id") val usuari2_id: Int
+)
+
+
 
 
 

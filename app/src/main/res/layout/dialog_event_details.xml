@@ -65,6 +65,16 @@
         android:layout_marginBottom="12dp" />
 
     <Button
+        android:id="@+id/button_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Chat"
+        android:backgroundTint="@color/green_chat"
+        android:layout_marginBottom="10dp"
+        android:textColor="#FFFFFF" />
+
+    <Button
         android:id="@+id/button_close_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

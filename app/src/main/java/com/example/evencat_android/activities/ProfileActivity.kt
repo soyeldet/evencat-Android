@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.evencat_android.AmicsRequest
 import com.example.evencat_android.R
 import com.example.evencat_android.RetrofitClient
 import com.example.evencat_android.activities.RegisterActivity
@@ -44,6 +45,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var profileImageView: CircleImageView
     private var imageUrlNew: String = ""
     private lateinit var buttonProfile2: CircleImageView
+    private lateinit var FriendsRV: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,10 +64,11 @@ class ProfileActivity : AppCompatActivity() {
         val descriptionText: EditText = findViewById(R.id.descriptionText)
         val editTextProfile: TextView = findViewById(R.id.editProfileText)
         val iconEditProfile: ImageView = findViewById(R.id.iconEditProfile)
-        val FriendsRV: RecyclerView = findViewById(R.id.friendsRView)
+        FriendsRV = findViewById(R.id.friendsRView)
         val editProfile: Button = findViewById(R.id.editProfile)
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val buttonSettings: Button = findViewById(R.id.settings)
+        val add_friends: Button = findViewById(R.id.add_friends)
 
         val buttonExplore: Button = findViewById(R.id.explore_button_menu)
         val buttonEvents: Button = findViewById(R.id.events_button_menu)
@@ -140,9 +143,7 @@ class ProfileActivity : AppCompatActivity() {
         FriendsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         FriendsRV.layoutManager = GridLayoutManager(this, 4)
 
-        val userList = listOf("Anna", "Joan", "Marc", "Laia", "Pau")
-        val adapter = UserBubbleAdapter(userList)
-        FriendsRV.adapter = adapter
+        loadFriends()
 
         nameText.isFocusable = false
         nameText.isClickable = false
@@ -158,7 +159,11 @@ class ProfileActivity : AppCompatActivity() {
         profileImageView.isFocusable = false
         profileImageView.isEnabled = false
 
-        FriendsRV.setOnTouchListener { _, _ -> true }
+        add_friends.isClickable = false
+        add_friends.isFocusable = false
+        add_friends.isEnabled = false
+
+        FriendsRV.setOnTouchListener { _, _ -> false }
 
         editProfile.setOnClickListener {
             if (!editing){
@@ -179,6 +184,13 @@ class ProfileActivity : AppCompatActivity() {
                 profileImageView.isClickable = true
                 profileImageView.isFocusable = true
                 profileImageView.isEnabled = true
+
+                FriendsRV.setOnTouchListener { _, _ -> true }
+
+                add_friends.isClickable = true
+                add_friends.isFocusable = true
+                add_friends.isEnabled = true
+
             } else {
                 editing = false
                 editTextProfile.setText("Edit Profile")
@@ -197,6 +209,12 @@ class ProfileActivity : AppCompatActivity() {
                 profileImageView.isClickable = false
                 profileImageView.isFocusable = false
                 profileImageView.isEnabled = false
+
+                FriendsRV.setOnTouchListener { _, _ -> false }
+
+                add_friends.isClickable = false
+                add_friends.isFocusable = false
+                add_friends.isEnabled = false
 
                 lifecycleScope.launch {
                     try {
@@ -235,6 +253,11 @@ class ProfileActivity : AppCompatActivity() {
 
             }
         }
+
+        add_friends.setOnClickListener {
+            showAddFriendDialog()
+        }
+
     }
 
     private fun showImagePickerDialog() {
@@ -383,4 +406,69 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun showAddFriendDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Añadir amigo")
+
+        val input = EditText(this)
+        input.hint = "ID del amigo"
+        input.inputType = android.text.InputType.TYPE_CLASS_NUMBER
+        builder.setView(input)
+
+        builder.setPositiveButton("Añadir") { dialog, _ ->
+            val friendIdStr = input.text.toString()
+            val friendId = friendIdStr.toIntOrNull()
+
+            if (friendId == null) {
+                Toast.makeText(this, "ID inválido", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            addFriendApi(friendId)
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
+
+        builder.show()
+    }
+
+    private fun addFriendApi(friendId: Int) {
+        lifecycleScope.launch {
+            try {
+                val userId = MainActivity.UserSession.id ?: return@launch
+                val request = AmicsRequest(usuari1_id = userId, usuari2_id = friendId)
+                val response = RetrofitClient.instance.addFriend(request)
+
+                if (response.isSuccessful) {
+                    Toast.makeText(this@ProfileActivity, "Amigo añadido", Toast.LENGTH_SHORT).show()
+                    // Opcional: recarga la lista de amigos aquí
+                    loadFriends()
+                } else {
+                    Toast.makeText(this@ProfileActivity, "Error al añadir amigo: ${response.code()}", Toast.LENGTH_LONG).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@ProfileActivity, "Error de red: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun loadFriends() {
+        lifecycleScope.launch {
+            val userId = MainActivity.UserSession.id ?: return@launch
+            val response = RetrofitClient.instance.getFriends(userId)
+            if (response.isSuccessful) {
+                val friends = response.body()?.filter { it.id != userId } ?: emptyList()
+                val adapter = UserBubbleAdapter(friends).apply {
+                    setOnItemClickListener { user ->
+                        Toast.makeText(this@ProfileActivity, "Amigo seleccionado: ${user.name}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                findViewById<RecyclerView>(R.id.friendsRView).adapter = adapter
+            }
+        }
+    }
+
+
 }
