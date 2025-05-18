@@ -75,7 +75,11 @@ class EventDetailsActivity : AppCompatActivity() {
             startActivity(Intent(this, ExploreActivity::class.java))
         }
 
-
+        chatButton.setOnClickListener {
+                val intent = Intent(this, ChatActivity::class.java)
+                intent.putExtra("chat_id", id)
+                this.startActivity(intent)
+            }
 
         if (creatingEvent == 1) {
             // Habilitar edición

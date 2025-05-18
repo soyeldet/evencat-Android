@@ -7,13 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".activities.ChatActivity"
     android:orientation="vertical"
-    android:background="@color/white"
-    >
+    android:background="@color/white">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,66 +25,62 @@
             android:layout_marginTop="35dp"
             android:layout_gravity="top|center"/>
 
-
         <ImageButton
             android:id="@+id/back_image_button"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@drawable/back"
             app:tint="@color/black"
-            tools:ignore="MissingConstraints"
             android:layout_gravity="top|left"
-            android:layout_marginLeft="22dp"
+            android:layout_marginStart="22dp"
             android:layout_marginTop="40dp"
-            android:background="@android:color/transparent"
-            />
-
-
+            android:background="@android:color/transparent"/>
     </FrameLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="700dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp">
 
-        <androidx.cardview.widget.CardView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerMessages"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="8dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </androidx.recyclerview.widget.RecyclerView>
+        <LinearLayout
+            android:id="@+id/messageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:layout_marginBottom="25dp"
+            android:background="@color/white">
 
-        </androidx.cardview.widget.CardView>
-    </FrameLayout>
+            <EditText
+                android:id="@+id/editMessage"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="Escribe un mensaje..."
+                android:background="@drawable/rounded_button_edit_profile"
+                android:padding="10dp"/>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <EditText
-            android:layout_width="280dp"
-            android:layout_height="50dp"
-            android:layout_gravity="left"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/rounded_button_edit_profile"
-            android:hint="  Write a message..."
-            />
-
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/send_message"
-            android:layout_gravity="right|top"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:scaleType="centerCrop" />
-
-    </FrameLayout>
+            <ImageButton
+                android:id="@+id/buttonSend"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/enviar"
+                android:scaleType="fitCenter"
+                android:layout_marginLeft="10dp"
+                android:contentDescription="Enviar"
+                android:background="@android:color/transparent"
+                app:tint="@color/dark_purple"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

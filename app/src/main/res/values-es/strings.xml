@@ -21,6 +21,7 @@
     <string name="profile">Perfil</string>
     <string name="events">Eventos</string>
     <string name="explore">Explorar</string>
+    <string name="old_password">Antigua contraseña</string>
     <string name="edit_profile">  Editar</string>
     <string name="about_me">Sobre mí</string>
     <string name="friends">Amigos</string>

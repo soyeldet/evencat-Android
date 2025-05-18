@@ -1,7 +1,10 @@
 package com.example.evencat_android.activities
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -10,7 +13,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -20,13 +25,26 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.evencat_android.R
 import com.example.evencat_android.RetrofitClient
+import com.example.evencat_android.activities.RegisterActivity
 import com.example.evencat_android.adapters.UserBubbleAdapter
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 class ProfileActivity : AppCompatActivity() {
+    private val REQUEST_IMAGE_CAPTURE = 1
+    private val REQUEST_IMAGE_PICK = 2
+    private var imageUri: Uri? = null
+    private lateinit var profileImageView: CircleImageView
+    private var imageUrlNew: String = ""
+    private lateinit var buttonProfile2: CircleImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -52,10 +70,33 @@ class ProfileActivity : AppCompatActivity() {
         val buttonExplore: Button = findViewById(R.id.explore_button_menu)
         val buttonEvents: Button = findViewById(R.id.events_button_menu)
         val buttonProfile: Button = findViewById(R.id.profile_button_menu)
-        val buttonProfile2: CircleImageView = findViewById(R.id.profile_image_button)
+        buttonProfile2 = findViewById(R.id.profile_image_button)
         val buttonExit: Button = findViewById(R.id.exit)
         val username: TextView = findViewById(R.id.username)
         username.setText(MainActivity.UserSession.username.toString())
+
+        profileImageView = findViewById(R.id.porfile_picture)
+
+        val imageUrl = MainActivity.UserSession.imageUrl
+        if (!imageUrl.isNullOrEmpty()) {
+            Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.profile_p)
+                .error(R.drawable.profile_p)
+                .into(profileImageView)
+        }
+
+        if (!imageUrl.isNullOrEmpty()) {
+            Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.profile_p)
+                .error(R.drawable.profile_p)
+                .into(buttonProfile2)
+        }
+
+        profileImageView.setOnClickListener {
+            showImagePickerDialog()
+        }
 
         buttonExit.setOnClickListener {
             MainActivity.UserSession.clearSession(this)
@@ -113,6 +154,10 @@ class ProfileActivity : AppCompatActivity() {
         descriptionText.isFocusableInTouchMode = false
         descriptionText.setCursorVisible(false)
 
+        profileImageView.isClickable = false
+        profileImageView.isFocusable = false
+        profileImageView.isEnabled = false
+
         FriendsRV.setOnTouchListener { _, _ -> true }
 
         editProfile.setOnClickListener {
@@ -130,6 +175,10 @@ class ProfileActivity : AppCompatActivity() {
                 descriptionText.isClickable = true
                 descriptionText.isFocusableInTouchMode = true
                 descriptionText.setCursorVisible(true)
+
+                profileImageView.isClickable = true
+                profileImageView.isFocusable = true
+                profileImageView.isEnabled = true
             } else {
                 editing = false
                 editTextProfile.setText("Edit Profile")
@@ -144,6 +193,10 @@ class ProfileActivity : AppCompatActivity() {
                 descriptionText.isClickable = false
                 descriptionText.isFocusableInTouchMode = false
                 descriptionText.setCursorVisible(false)
+
+                profileImageView.isClickable = false
+                profileImageView.isFocusable = false
+                profileImageView.isEnabled = false
 
                 lifecycleScope.launch {
                     try {
@@ -180,6 +233,153 @@ class ProfileActivity : AppCompatActivity() {
                 MainActivity.UserSession.saveSession(this@ProfileActivity)
                 Toast.makeText(this@ProfileActivity, "Saved", Toast.LENGTH_SHORT).show()
 
+            }
+        }
+    }
+
+    private fun showImagePickerDialog() {
+        val options = arrayOf("Hacer una foto", "Seleccionar de galería")
+
+        AlertDialog.Builder(this)
+            .setTitle("Selecciona una opción")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> openCamera()
+                    1 -> openGallery()
+                }
+            }
+            .show()
+    }
+
+    private fun openCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        imageUri = FileProvider.getUriForFile(
+            this,
+            "${packageName}.provider", // asegúrate que coincida con el `provider` de AndroidManifest
+            createImageFile()
+        )
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "image/*"
+        startActivityForResult(intent, REQUEST_IMAGE_PICK)
+    }
+
+    private fun createImageFile(): File {
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("IMG_", ".jpg", storageDir)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK) {
+            val uri = when (requestCode) {
+                REQUEST_IMAGE_CAPTURE -> imageUri
+                REQUEST_IMAGE_PICK -> data?.data
+                else -> null
+            }
+
+            uri?.let {
+                profileImageView.setImageURI(it) // Mostrar en el ImageView
+                buttonProfile2.setImageURI(it)
+                uploadImageWithLifecycle(it)     // Subir al servidor
+            }
+        }
+    }
+
+    private fun uploadImageWithLifecycle(uri: Uri) {
+        lifecycleScope.launch {
+            try {
+                val mimeType = contentResolver.getType(uri) ?: "image/*"
+                val fileExtension = when (mimeType) {
+                    "image/jpeg" -> ".jpg"
+                    "image/png" -> ".png"
+                    else -> ".bin"
+                }
+
+                contentResolver.openInputStream(uri)?.use { inputStream ->
+                    val tempFile = File.createTempFile("upload_", fileExtension, cacheDir).apply {
+                        deleteOnExit()
+                    }
+
+                    inputStream.copyTo(tempFile.outputStream())
+
+                    val requestBody = tempFile.asRequestBody(mimeType.toMediaTypeOrNull())
+                    val multipart = MultipartBody.Part.createFormData(
+                        "file",
+                        "image_${System.currentTimeMillis()}$fileExtension",
+                        requestBody
+                    )
+
+                    val response = try {
+                        RetrofitClient.instance.uploadImage(multipart)
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            this@ProfileActivity,
+                            "Network error: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@launch
+                    }
+
+                    when {
+                        response.isSuccessful -> {
+                            imageUrlNew = response.body()?.url ?: ""
+                            Toast.makeText(
+                                this@ProfileActivity,
+                                "Imagen subida: $imageUrlNew",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            lifecycleScope.launch {
+                                try {
+                                    val userId = MainActivity.UserSession.id ?: return@launch
+                                    val response = RetrofitClient.instance.updateImageUrl(userId, imageUrlNew)
+
+                                    if (response.isSuccessful) {
+                                        MainActivity.UserSession.imageUrl = imageUrlNew
+                                        MainActivity.UserSession.saveSession(this@ProfileActivity)
+                                        Toast.makeText(this@ProfileActivity, "Imagen actualizada", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        Log.e("API", "Error al actualizar imagen: ${response.code()}")
+                                    }
+                                } catch (e: Exception) {
+                                    Log.e("API", "Excepción al actualizar imagen", e)
+                                }
+                            }
+                            MainActivity.UserSession.imageUrl = imageUrlNew
+                            MainActivity.UserSession.saveSession(this@ProfileActivity)
+
+                        }
+
+                        response.code() == 400 -> {
+                            val errorBody = response.errorBody()?.string()
+                            Log.e("Upload Error", "400 Bad Request: $errorBody")
+                            Toast.makeText(
+                                this@ProfileActivity,
+                                "Error del servidor: ${errorBody ?: "Formato inválido"}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                        else -> {
+                            Toast.makeText(
+                                this@ProfileActivity,
+                                "Error ${response.code()}: ${response.message()}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@ProfileActivity,
+                    "Error: ${e.localizedMessage}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

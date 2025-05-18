@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.example.evencat_android.R
 import com.example.evencat_android.activities.UserEventsActivity
 import de.hdodenhof.circleimageview.CircleImageView
@@ -31,6 +32,15 @@ class MenuActivity : AppCompatActivity() {
         val buttonExit: Button = findViewById(R.id.exit)
         val username: TextView = findViewById(R.id.username)
         username.setText(MainActivity.UserSession.username.toString())
+
+        val imageUrl = MainActivity.UserSession.imageUrl
+        if (!imageUrl.isNullOrEmpty()) {
+            Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.profile_p)
+                .error(R.drawable.profile_p)
+                .into(buttonProfile2)
+        }
 
         buttonExit.setOnClickListener {
             MainActivity.UserSession.clearSession(this)

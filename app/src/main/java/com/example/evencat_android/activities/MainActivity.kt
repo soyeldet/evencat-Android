@@ -111,7 +111,8 @@ class MainActivity : AppCompatActivity() {
                                     email = userRecieved.correo,
                                     password = userRecieved.contrasena,
                                     rol = userRecieved.rol,
-                                    description = userRecieved.descripcion
+                                    description = userRecieved.descripcion,
+                                    imageUrl = userRecieved.image_url
                                 )
                             } else {
                                 UserSession.id = userRecieved.id
@@ -163,16 +164,26 @@ class MainActivity : AppCompatActivity() {
         var password: String? = null
         var rol: String? = null
         var description: String? = null
+        var imageUrl: String? = null
         var isLoggedIn: Boolean = false
 
-        fun setUserData(context: Context, id: Int, username: String, email: String,
-                        password: String, rol: String, description: String) {
+        fun setUserData(
+            context: Context,
+            id: Int,
+            username: String,
+            email: String,
+            password: String,
+            rol: String,
+            description: String,
+            imageUrl: String?
+        ) {
             UserSession.id = id
             UserSession.username = username
             UserSession.email = email
             UserSession.password = password
             UserSession.rol = rol
             UserSession.description = description
+            UserSession.imageUrl = imageUrl
             UserSession.isLoggedIn = true
 
             val sharedPref = context.getSharedPreferences("UserSession", MODE_PRIVATE)
@@ -183,6 +194,7 @@ class MainActivity : AppCompatActivity() {
                 putString("password", password)
                 putString("rol", rol)
                 putString("description", description)
+                putString("image_url", imageUrl)
                 putBoolean("isLoggedIn", true)
                 apply()
             }
@@ -196,8 +208,10 @@ class MainActivity : AppCompatActivity() {
             rol = sharedPref.getString("rol", null)
             username = sharedPref.getString("username", null)
             description = sharedPref.getString("description", null)
+            imageUrl = sharedPref.getString("image_url", null)
             isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
         }
+
 
         fun clearSession(context: Context) {
             id = 0
@@ -221,6 +235,7 @@ class MainActivity : AppCompatActivity() {
             with(sharedPref.edit()) {
                 putString("username", username)
                 putString("description", description)
+                putString("image_url", imageUrl)
                 apply()
             }
         }

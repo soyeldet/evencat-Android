@@ -157,6 +157,51 @@
             />
 
         <EditText
+            android:id="@+id/passwordOldText"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="@string/old_password"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="16sp"
+            android:background="@android:color/transparent"
+            android:layout_marginLeft="56.7dp"
+            android:layout_marginRight="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="1dp"
+            android:textColor="@color/light_gray_login_text"
+            android:password="true"
+            />
+
+        <ImageButton
+            android:id="@+id/showPasswordOld"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/password_visible"
+            android:layout_gravity="center|right"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/transparent"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/rounded_edittext_login"
+        >
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/password"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="20dp"
+            />
+
+        <EditText
             android:id="@+id/password1Text"
             android:layout_width="match_parent"
             android:layout_height="60dp"

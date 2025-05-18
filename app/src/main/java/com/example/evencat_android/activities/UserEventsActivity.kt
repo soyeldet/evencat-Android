@@ -21,6 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.evencat_android.adapters.Event2
 import com.example.evencat_android.adapters.Event2Adapter
 import com.example.evencat_android.R
@@ -63,6 +64,15 @@ class UserEventsActivity : AppCompatActivity() {
         val username: TextView = findViewById(R.id.username)
         username.setText(MainActivity.UserSession.username.toString())
         val buttonSettings: Button = findViewById(R.id.settings)
+
+        val imageUrl = MainActivity.UserSession.imageUrl
+        if (!imageUrl.isNullOrEmpty()) {
+            Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.profile_p)
+                .error(R.drawable.profile_p)
+                .into(buttonProfile2)
+        }
 
         myEvents = findViewById(R.id.my_events)
         allEvents = mutableListOf()

@@ -16,6 +16,7 @@
     <string name="nearby_you">A prop teu</string>
     <string name="sing_in">Inicia sessió</string>
     <string name="password">La teva contrasenya</string>
+    <string name="old_password">Antiga contrasenya</string>
     <string name="remember_me">Recorda\'m</string>
     <string name="sing_up">Registra\'t</string>
     <string name="profile">Perfil</string>

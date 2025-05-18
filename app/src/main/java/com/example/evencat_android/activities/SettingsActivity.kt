@@ -48,8 +48,10 @@ class SettingsActivity : AppCompatActivity() {
         val emailEdit: EditText = findViewById(R.id.emailText)
         val pass1Edit: EditText = findViewById(R.id.password1Text)
         val pass2Edit: EditText = findViewById(R.id.password2Text)
+        val pass3Edit: EditText = findViewById(R.id.passwordOldText)
         val showPass1: ImageButton = findViewById(R.id.showPassword)
         val showPass2: ImageButton = findViewById(R.id.showPassword2)
+        val showPass3: ImageButton = findViewById(R.id.showPasswordOld)
         val idiomeSpinner: Spinner = findViewById(R.id.idiome)
 
         val languageCodes = arrayOf("es", "cat", "en")
@@ -57,6 +59,7 @@ class SettingsActivity : AppCompatActivity() {
 
         var passVisible1 = false
         var passVisible2 = false
+        var passVisible3 = false
 
         backButton.setOnClickListener {
             finish()
@@ -94,6 +97,7 @@ class SettingsActivity : AppCompatActivity() {
             val email = emailEdit.text.toString().trim()
             val pass1 = pass1Edit.text.toString()
             val pass2 = pass2Edit.text.toString()
+            val pass3 = pass3Edit.text.toString()
 
             if (name.isEmpty()) {
                 toast("El nombre no puede estar vacío")
@@ -112,6 +116,10 @@ class SettingsActivity : AppCompatActivity() {
 
             if (pass1.length < 8) {
                 toast("La contraseña debe tener al menos 8 caracteres")
+                return@setOnClickListener
+            }
+            if (encryptPassword(pass3) != MainActivity.UserSession.password.toString()){
+                toast("Escribe tu contraseña para modificarla")
                 return@setOnClickListener
             }
 
@@ -134,6 +142,11 @@ class SettingsActivity : AppCompatActivity() {
         showPass2.setOnClickListener {
             passVisible2 = !passVisible2
             togglePasswordVisibility(pass2Edit, passVisible2, showPass2)
+        }
+
+        showPass3.setOnClickListener {
+            passVisible3 = !passVisible3
+            togglePasswordVisibility(pass3Edit, passVisible3, showPass3)
         }
     }
 
@@ -175,6 +188,7 @@ class SettingsActivity : AppCompatActivity() {
             correo = email,
             contrasena = encryptedPassword,
             rol = MainActivity.UserSession.rol ?: "UsuariNormal",
+            image_url = "",
             descripcion = MainActivity.UserSession.description ?: ""
         )
 
@@ -189,6 +203,7 @@ class SettingsActivity : AppCompatActivity() {
                         email = email,
                         password = encryptedPassword,
                         rol = user.rol,
+                        imageUrl = MainActivity.UserSession.imageUrl,
                         description = user.descripcion
                     )
                     finish()

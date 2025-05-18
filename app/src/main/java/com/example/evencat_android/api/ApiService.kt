@@ -1,12 +1,12 @@
 package com.example.evencat_android.api
 
-import com.example.evencat_android.Butaques
 import com.example.evencat_android.Event
 import com.example.evencat_android.EventRequest
 import com.example.evencat_android.Organizer
 import com.example.evencat_android.Place
 import com.example.evencat_android.ReservaResponse
 import com.example.evencat_android.ReservationRequest
+import com.example.evencat_android.UploadResponse
 import com.example.evencat_android.User
 import com.example.evencat_android.UserLogin
 import okhttp3.MultipartBody
@@ -32,9 +32,9 @@ interface ApiService {
 
     @Multipart
     @POST("api/upload")
-    fun uploadImage(
-        @Part image: MultipartBody.Part,
-    ): Call<ResponseBody>
+    suspend fun uploadImage(
+        @Part file: MultipartBody.Part
+    ): Response<UploadResponse>
 
     @POST("api/Usuaris")
     fun registerUser(@Body user: User): Call<ResponseBody>
@@ -83,5 +83,7 @@ interface ApiService {
     @PUT("api/Usuaris/{id}/UpdateProfile")
     fun updateUser(@Path("id") id: Int, @Body user: User): Call<ResponseBody>
 
+    @PUT("api/Usuaris/{id}/ImageUrl")
+    suspend fun updateImageUrl(@Path("id") userId: Int, @Body imageUrl: String): Response<Void>
 
 }

@@ -9,7 +9,8 @@ data class User(
     @SerializedName("UserEmail") val correo: String,
     @SerializedName("Password") val contrasena: String,
     @SerializedName("Rol") val rol: String,
-    @SerializedName("Description") val descripcion: String
+    @SerializedName("Description") val descripcion: String,
+    @SerializedName("ImageUrl") val image_url: String
 ): Serializable
 
 data class UserLogin(
@@ -85,6 +86,32 @@ data class Butaques(
     @SerializedName("espai_id")
     val espai_id: Int
 )
+
+data class Message(
+    val text: String,
+    val isSentByUser: Boolean
+)
+
+data class SocketsDTO(
+    val sender_id: Int,
+    val chat_id: Int,
+    val content: String?
+)
+
+data class MessageResponse(
+    val type: String,
+    val message_id: Int,
+    val from: Int,
+    val content: String?,
+    val timestamp: String
+)
+
+data class UploadResponse(
+    @SerializedName("message") val message: String,
+    @SerializedName("fileName") val fileName: String,
+    @SerializedName("url") val url: String
+)
+
 
 
 
