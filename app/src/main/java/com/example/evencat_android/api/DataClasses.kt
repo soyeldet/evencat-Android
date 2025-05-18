@@ -139,6 +139,13 @@ data class AmicsResponse(
     @SerializedName("usuari2_id") val usuari2_id: Int
 )
 
+data class Seat(
+    val id: Int,
+    val seatNumber: String,
+    var isAvailable: Boolean,
+    var isSelected: Boolean = false
+)
+
 
 
 

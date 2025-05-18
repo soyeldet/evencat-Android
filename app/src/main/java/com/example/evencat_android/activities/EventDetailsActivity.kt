@@ -14,12 +14,15 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.evencat_android.Event
 import com.example.evencat_android.EventRequest
 import com.example.evencat_android.R
 import com.example.evencat_android.ReservationRequest
 import com.example.evencat_android.RetrofitClient
+import com.example.evencat_android.Seat
 import com.example.evencat_android.activities.UserEventsActivity
 import com.example.evencat_android.adapters.Event2
 import com.example.evencat_android.adapters.Event2Adapter
@@ -49,6 +52,7 @@ class EventDetailsActivity : AppCompatActivity() {
     private var event: Event? = null
     private var espaiId: Int? = null
     private var id: Int? = null
+    lateinit var adapter: SeatAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -215,99 +219,96 @@ class EventDetailsActivity : AppCompatActivity() {
                     try {
                         val response = RetrofitClient.instance.getAvailableSeats(id!!)
                         if (response.isSuccessful) {
-                            val seatResponses = response.body() ?: emptyList()
+                            val seatResponses = response.body()
 
-                            if (seatResponses.isNotEmpty()) {
-                                val seatOptions =
-                                    if (seatResponses.size == 1 && seatResponses[0] == 0) {
-                                        arrayOf("Random seat")
-                                    } else {
-                                        seatResponses.mapIndexed { index, _ -> "Seat ${index + 1}" }
-                                            .toTypedArray()
+                            withContext(Dispatchers.Main) {
+                                val dialogView = layoutInflater.inflate(R.layout.dialog_seat_selection, null)
+                                val recyclerSeats = dialogView.findViewById<RecyclerView>(R.id.recycler_seats)
+                                val buttonConfirm = dialogView.findViewById<Button>(R.id.button_confirm_seat)
+
+                                // Comprobar si hay asientos reales disponibles
+                                val seats = if (seatResponses.isNullOrEmpty() || (seatResponses.size == 1 && seatResponses[0] == 0)) {
+                                    // Solo un asiento simbólico disponible (evento sin asientos fijos)
+                                    mutableListOf(
+                                        Seat(
+                                            id = 0,
+                                            seatNumber = "Asiento aleatorio",
+                                            isAvailable = true,
+                                            isSelected = false
+                                        )
+                                    )
+                                } else {
+                                    // Mapeamos los asientos reales
+                                    seatResponses.mapIndexed { index, seatId ->
+                                        Seat(
+                                            id = seatId,
+                                            seatNumber = "Butaca ${index + 1}",
+                                            isAvailable = seatId != 0,
+                                            isSelected = false
+                                        )
+                                    }.toMutableList()
+                                }
+
+                                // Configurar el RecyclerView
+                                val columnCount = if (seats.size == 1) 1 else 5
+                                recyclerSeats.layoutManager = GridLayoutManager(this@EventDetailsActivity, columnCount)
+
+                                adapter = SeatAdapter(seats) { seat ->
+                                    seats.forEach { it.isSelected = false }
+                                    seat.isSelected = true
+                                    adapter.notifyDataSetChanged()
+                                }
+                                recyclerSeats.adapter = adapter
+
+                                val dialog = AlertDialog.Builder(this@EventDetailsActivity)
+                                    .setView(dialogView)
+                                    .setCancelable(true)
+                                    .create()
+
+                                buttonConfirm.setOnClickListener {
+                                    val selectedSeat = seats.find { it.isSelected }
+                                    if (selectedSeat == null) {
+                                        Toast.makeText(this@EventDetailsActivity, "Selecciona una butaca", Toast.LENGTH_SHORT).show()
+                                        return@setOnClickListener
                                     }
 
-                                withContext(Dispatchers.Main) {
-                                    AlertDialog.Builder(this@EventDetailsActivity)
-                                        .setTitle("Selecciona un asiento")
-                                        .setItems(seatOptions) { dialog, which ->
-                                            val selectedSeat = seatResponses[which]
+                                    val currentDate = SimpleDateFormat(
+                                        "yyyy-MM-dd'T'HH:mm:ss",
+                                        Locale.getDefault()
+                                    ).format(Date())
 
-                                            val currentDate = SimpleDateFormat(
-                                                "yyyy-MM-dd'T'HH:mm:ss",
-                                                Locale.getDefault()
-                                            ).format(Date())
+                                    val reserva = ReservationRequest(
+                                        eventoId = id!!,
+                                        butacaId = if (selectedSeat.id == 0) null else selectedSeat.id,
+                                        fechaReserva = currentDate,
+                                        userId = MainActivity.UserSession.id!!
+                                    )
 
-                                            val reserva = ReservationRequest(
-                                                eventoId = id!!,
-                                                butacaId = if (selectedSeat == 0) null else selectedSeat,
-                                                fechaReserva = currentDate,
-                                                userId = MainActivity.UserSession.id!!
-                                            )
-
-                                            lifecycleScope.launch {
-                                                try {
-                                                    val reservaResponse =
-                                                        RetrofitClient.instance.createReservation(
-                                                            reserva
-                                                        )
-                                                    if (reservaResponse.isSuccessful) {
-                                                        val reserva = reservaResponse.body()
-                                                        Toast.makeText(
-                                                            this@EventDetailsActivity,
-                                                            "Reserva creada con éxito",
-                                                            Toast.LENGTH_LONG
-                                                        ).show()
-                                                        Log.d(TAG, "Reserva exitosa: $reserva")
-                                                    } else {
-                                                        Toast.makeText(
-                                                            this@EventDetailsActivity,
-                                                            "Este usuario ya tiene una reserva",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        Log.e(
-                                                            TAG,
-                                                            "Respuesta error: ${
-                                                                reservaResponse.errorBody()
-                                                                    ?.string()
-                                                            }"
-                                                        )
-                                                    }
-                                                } catch (e: Exception) {
-                                                    Log.e(
-                                                        TAG,
-                                                        "Excepción al crear reserva: ${e.message}"
-                                                    )
-                                                    Toast.makeText(
-                                                        this@EventDetailsActivity,
-                                                        "Fallo al enviar reserva",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
+                                    lifecycleScope.launch {
+                                        try {
+                                            val reservaResponse = RetrofitClient.instance.createReservation(reserva)
+                                            if (reservaResponse.isSuccessful) {
+                                                Toast.makeText(this@EventDetailsActivity, "Reserva creada con éxito", Toast.LENGTH_LONG).show()
+                                                Log.d(TAG, "Reserva exitosa: ${reservaResponse.body()}")
+                                                dialog.dismiss()
+                                            } else {
+                                                Toast.makeText(this@EventDetailsActivity, "Este usuario ya tiene una reserva", Toast.LENGTH_SHORT).show()
+                                                Log.e(TAG, "Respuesta error: ${reservaResponse.errorBody()?.string()}")
                                             }
-
-                                            Log.e("Reserva", reserva.toString())
+                                        } catch (e: Exception) {
+                                            Log.e(TAG, "Excepción al crear reserva: ${e.message}")
+                                            Toast.makeText(this@EventDetailsActivity, "Fallo al enviar reserva", Toast.LENGTH_SHORT).show()
                                         }
-                                        .setNegativeButton("Cancelar", null)
-                                        .show()
+                                    }
                                 }
-                            } else {
-                                withContext(Dispatchers.Main) {
-                                    Toast.makeText(
-                                        this@EventDetailsActivity,
-                                        "No hay asientos disponibles",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+
+                                dialog.show()
                             }
                         }
                     } catch (e: Exception) {
                         Log.e(TAG, "Error: ${e.message}")
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                this@EventDetailsActivity,
-                                "Error al obtener asientos",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this@EventDetailsActivity, "Error al obtener asientos", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
