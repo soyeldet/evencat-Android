@@ -29,7 +29,7 @@ class SocketClient(
         Thread {
             try {
                 // Conectar al servidor
-                socket = Socket("192.168.4.80", 6969)
+                socket = Socket("10.0.2.236", 6969)
                 writer = BufferedWriter(OutputStreamWriter(socket!!.getOutputStream()))
                 reader = BufferedReader(InputStreamReader(socket!!.getInputStream()))
 

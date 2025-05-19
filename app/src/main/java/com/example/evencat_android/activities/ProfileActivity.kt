@@ -144,6 +144,9 @@ class ProfileActivity : AppCompatActivity() {
                 editing = true
                 enableEditing(nameText, descriptionText, profileImageView, add_friends)
                 iconEditProfile.isVisible = false
+                profileImageView.isEnabled = true
+                profileImageView.isClickable = true
+                profileImageView.isFocusable = true
                 editTextProfile.text = getString(R.string.save)
             } else {
                 editing = false
